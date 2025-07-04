@@ -1,0 +1,3 @@
+[04-Jul-2025 11:35:04 Asia/Ho_Chi_Minh] PHP Warning:  JIT is incompatible with third party extensions that setup user opcode handlers. JIT disabled. in Unknown on line 0
+[04-Jul-2025 11:36:56 Asia/Ho_Chi_Minh] PHP Warning:  JIT is incompatible with third party extensions that setup user opcode handlers. JIT disabled. in Unknown on line 0
+[04-Jul-2025 12:32:14 Asia/Ho_Chi_Minh] PHP Warning:  JIT is incompatible with third party extensions that setup user opcode handlers. JIT disabled. in Unknown on line 0

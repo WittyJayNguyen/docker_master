@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  laravel-php74-psql:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: laravel_php74_psql_app
+    restart: unless-stopped
+    ports:
+      - "8011:80"
+    volumes:
+      - ../../projects/laravel-php74-psql:/app/laravel-php74-psql
+      - ../../logs/apache/laravel-php74-psql:/var/log/apache2
+      - ../../data/uploads/laravel-php74-psql:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/laravel-php74-psql
+      - PHP_VERSION=7.4
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_server
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php74_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_server
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+    external_links:
+      - postgres_server
+      - redis_server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  laravel-php74-psql-queue:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: laravel_php74_psql_queue
+    restart: unless-stopped
+    volumes:
+      - ../../projects/laravel-php74-psql:/app/laravel-php74-psql
+    working_dir: /app/laravel-php74-psql
+    command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=90"]
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_server
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php74_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_server
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+    external_links:
+      - postgres_server
+      - redis_server
+
+  laravel-php74-psql-scheduler:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: laravel_php74_psql_scheduler
+    restart: unless-stopped
+    volumes:
+      - ../../projects/laravel-php74-psql:/app/laravel-php74-psql
+    working_dir: /app/laravel-php74-psql
+    command: ["sh", "-c", "while true; do php artisan schedule:run; sleep 60; done"]
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_server
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php74_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_server
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+    external_links:
+      - postgres_server
+      - redis_server
+
+# Network defined in shared services

@@ -1,0 +1,41 @@
+# Base template cho PHP applications
+version: '3.8'
+
+services:
+  php-app:
+    build:
+      context: ../../docker/php84
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./app:/app
+      - ../../logs/apache:/var/log/apache2
+      - ../../data/uploads:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/app
+      - PHP_VERSION=8.4
+      - DB_HOST=mysql_server
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword123
+      - REDIS_HOST=redis_server
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  php-queue:
+    extends:
+      service: php-app
+    container_name: "${PROJECT_NAME}_queue_worker"
+    command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=90"]
+    ports: []
+    healthcheck:
+      disable: true
+
+networks:
+  app-network:
+    external: true
+    name: docker_master_network

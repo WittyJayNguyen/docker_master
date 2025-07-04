@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  wordpress-php74-mysql:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: wordpress_php74_mysql_app
+    restart: unless-stopped
+    ports:
+      - "8012:80"
+    volumes:
+      - ../../projects/wordpress-php74-mysql:/app/wordpress-php74-mysql
+      - ../../logs/apache/wordpress-php74-mysql:/var/log/apache2
+      - ../../data/uploads/wordpress-php74-mysql:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/wordpress-php74-mysql
+      - PHP_VERSION=7.4
+      - WORDPRESS_DB_HOST=mysql_server
+      - WORDPRESS_DB_NAME=wordpress_php74_mysql
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=rootpassword123
+      - WORDPRESS_TABLE_PREFIX=wp_
+      - WORDPRESS_DEBUG=1
+    networks:
+      - app-network
+    external_links:
+      - mysql_server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Network defined in shared services
