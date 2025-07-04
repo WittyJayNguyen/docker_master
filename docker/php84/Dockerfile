@@ -39,6 +39,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Xdebug for PHP 8.4
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -55,6 +59,12 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini 
     && echo "opcache.max_accelerated_files=20000" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini \
     && echo "opcache.revalidate_freq=0" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini \
     && echo "opcache.validate_timestamps=1" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini
+
+# Copy Xdebug configuration
+COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Create Xdebug log directory
+RUN mkdir -p /tmp/xdebug && chmod 777 /tmp/xdebug
 
 # Set proper permissions
 RUN chown -R application:application /app

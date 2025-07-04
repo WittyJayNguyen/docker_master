@@ -1,0 +1,125 @@
+version: '3.8'
+
+# Low RAM Profile - Chỉ chạy services cần thiết
+# Dành cho máy có 4GB RAM hoặc ít hơn
+# Tổng RAM usage: ~1-2GB
+
+services:
+  # PostgreSQL - tối ưu tối đa
+  postgres:
+    image: postgres:15
+    container_name: postgres_server
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_pass
+      - POSTGRES_SHARED_BUFFERS=16MB
+      - POSTGRES_EFFECTIVE_CACHE_SIZE=64MB
+      - POSTGRES_WORK_MEM=2MB
+      - POSTGRES_MAINTENANCE_WORK_MEM=8MB
+      - POSTGRES_MAX_CONNECTIONS=25
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    networks:
+      - app-network
+
+  # Redis - cấu hình tối thiểu
+  redis:
+    image: redis:7-alpine
+    container_name: redis_server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    command: redis-server --maxmemory 16mb --maxmemory-policy allkeys-lru
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+        reservations:
+          memory: 16M
+    networks:
+      - app-network
+
+  # Chỉ chạy Laravel PHP 8.4 (version mới nhất)
+  laravel-php84-psql:
+    build:
+      context: ./docker/php84
+      dockerfile: Dockerfile
+    container_name: laravel_php84_psql_app
+    restart: unless-stopped
+    ports:
+      - "8010:80"
+      - "9084:9003"  # Xdebug port
+    volumes:
+      - ./projects/laravel-php84-psql:/app/laravel-php84-psql
+      - ./logs/apache/laravel-php84-psql:/var/log/apache2
+      - ./data/uploads/laravel-php84-psql:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/laravel-php84-psql
+      - PHP_VERSION=8.4
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=1000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_server
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php84_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_server
+      - REDIS_PORT=6379
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 96M
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      - retries: 3
+
+  # Mailhog - chỉ khi cần test email
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+        reservations:
+          memory: 16M
+    networks:
+      - app-network
+
+# Network
+networks:
+  app-network:
+    driver: bridge
+    name: docker_master_network
+
+# Volumes
+volumes:
+  postgres_data:
+  redis_data:

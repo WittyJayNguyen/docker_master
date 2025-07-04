@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     ports:
       - "8012:80"
+      - "9012:9003"  # Xdebug port for WordPress PHP 7.4
     volumes:
       - ../../projects/wordpress-php74-mysql:/app/wordpress-php74-mysql
       - ../../logs/apache/wordpress-php74-mysql:/var/log/apache2

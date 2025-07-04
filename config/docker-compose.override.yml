@@ -1,0 +1,146 @@
+version: '3.8'
+
+# RAM Optimization Override
+# Giảm RAM usage từ ~4-6GB xuống ~2-3GB
+
+services:
+  # PostgreSQL - giảm từ 300MB xuống 150MB
+  postgres:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    environment:
+      - POSTGRES_SHARED_BUFFERS=32MB
+      - POSTGRES_EFFECTIVE_CACHE_SIZE=128MB
+      - POSTGRES_WORK_MEM=4MB
+      - POSTGRES_MAINTENANCE_WORK_MEM=16MB
+      - POSTGRES_MAX_CONNECTIONS=50
+
+  # MySQL - giảm từ 400MB xuống 200MB
+  mysql:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    command: >
+      --innodb-buffer-pool-size=64M
+      --innodb-log-buffer-size=8M
+      --max-connections=50
+      --table-open-cache=32
+      --skip-name-resolve
+
+  # Redis - giảm từ 50MB xuống 32MB
+  redis:
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M
+    command: redis-server --maxmemory 32mb --maxmemory-policy allkeys-lru
+
+  # Laravel PHP 8.4 - giảm từ 200MB xuống 128MB
+  laravel-php84-psql:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    environment:
+      - PHP_MEMORY_LIMIT=128M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=64
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=2000
+
+  # Laravel PHP 8.4 Queue - giới hạn RAM
+  laravel-php84-psql-queue:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Laravel PHP 8.4 Scheduler - giới hạn RAM
+  laravel-php84-psql-scheduler:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Laravel PHP 7.4 - giảm từ 200MB xuống 128MB
+  laravel-php74-psql:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    environment:
+      - PHP_MEMORY_LIMIT=128M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=64
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=2000
+
+  # Laravel PHP 7.4 Queue - giới hạn RAM
+  laravel-php74-psql-queue:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Laravel PHP 7.4 Scheduler - giới hạn RAM
+  laravel-php74-psql-scheduler:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # WordPress - giảm từ 200MB xuống 128MB
+  wordpress-php74-mysql:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    environment:
+      - PHP_MEMORY_LIMIT=128M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=64
+
+  # pgAdmin - giảm từ 150MB xuống 64MB
+  pgadmin:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # phpMyAdmin - giảm từ 100MB xuống 64MB
+  phpmyadmin:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Mailhog - giảm từ 50MB xuống 32MB
+  mailhog:
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M

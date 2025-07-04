@@ -27,7 +27,7 @@ services:
       retries: 3
 
   php-queue:
-    extends:
+    extends:wmhr 
       service: php-app
     container_name: "${PROJECT_NAME}_queue_worker"
     command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=90"]

@@ -12,4 +12,7 @@ include:
   - ./platforms/laravel-php74-psql/docker-compose.laravel-php74-psql.yml
   - ./platforms/wordpress-php74-mysql/docker-compose.wordpress-php74-mysql.yml
 
+  # Optional: Auto-monitoring (uncomment to enable)
+  # - ./docker-compose.monitoring.yml
+
 # Global networks - removed to avoid conflicts with shared services
