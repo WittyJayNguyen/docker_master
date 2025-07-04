@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  {{PROJECT_NAME}}:
+    build:
+      context: ../../docker/php84
+      dockerfile: Dockerfile
+    container_name: {{PROJECT_NAME}}_php84
+    restart: unless-stopped
+    ports:
+      - "{{PORT}}:80"
+    volumes:
+      - ../../projects/{{PROJECT_NAME}}:/app/{{PROJECT_NAME}}
+      - ../../logs/apache/{{PROJECT_NAME}}:/var/log/apache2
+      - ../../data/uploads/{{PROJECT_NAME}}:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/{{PROJECT_NAME}}
+      - PHP_VERSION=8.4
+      - DB_HOST=mysql_server
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword123
+      - REDIS_HOST=redis_server
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  {{PROJECT_NAME}}-queue:
+    build:
+      context: ../../docker/php84
+      dockerfile: Dockerfile
+    container_name: {{PROJECT_NAME}}_queue_worker
+    restart: unless-stopped
+    volumes:
+      - ../../projects/{{PROJECT_NAME}}:/app/{{PROJECT_NAME}}
+    working_dir: /app/{{PROJECT_NAME}}
+    command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=90"]
+    environment:
+      - DB_HOST=mysql_server
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword123
+      - REDIS_HOST=redis_server
+    networks:
+      - app-network
+
+  {{PROJECT_NAME}}-scheduler:
+    build:
+      context: ../../docker/php84
+      dockerfile: Dockerfile
+    container_name: {{PROJECT_NAME}}_scheduler
+    restart: unless-stopped
+    volumes:
+      - ../../projects/{{PROJECT_NAME}}:/app/{{PROJECT_NAME}}
+    working_dir: /app/{{PROJECT_NAME}}
+    command: ["sh", "-c", "while true; do php artisan schedule:run; sleep 60; done"]
+    environment:
+      - DB_HOST=mysql_server
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword123
+      - REDIS_HOST=redis_server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
+    name: docker_master_network
