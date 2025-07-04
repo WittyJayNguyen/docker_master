@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     ports:
       - "8011:80"
+      - "9074:9003"  # Xdebug port for PHP 7.4
     volumes:
       - ../../projects/laravel-php74-psql:/app/laravel-php74-psql
       - ../../logs/apache/laravel-php74-psql:/var/log/apache2
@@ -29,11 +30,11 @@ services:
     external_links:
       - postgres_server
       - redis_server
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost/"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
 
   laravel-php74-psql-queue:
     build:

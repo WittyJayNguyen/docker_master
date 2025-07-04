@@ -1,6 +1,6 @@
 <?php
 /**
- * Laravel PHP 8.4 + PostgreSQL Example
+ * Laravel PHP 8.4 + PostgreSQL Example - FIXED VERSION
  * Demo application showing PHP 8.4 features with PostgreSQL connection
  */
 
@@ -24,18 +24,11 @@ $username = $_ENV['DB_USERNAME'] ?? 'postgres_user';
 $password = $_ENV['DB_PASSWORD'] ?? 'postgres_pass';
 
 try {
-    $dsn = "pgsql:host=$host;port=$port;dbname=postgres"; // Connect to default DB first
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Create database if not exists
-    $pdo->exec("CREATE DATABASE $dbname");
-    echo "<p>✅ Database '$dbname' created or already exists</p>";
-    
-    // Connect to our database
+    // Connect directly to our database (no CREATE DATABASE)
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
     $pdo = new PDO($dsn, $username, $password);
-    
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     // Create sample table
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS users (
@@ -45,20 +38,20 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
-    
+
     // Insert sample data
     $stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?) ON CONFLICT (email) DO NOTHING");
     $stmt->execute(['John Doe', 'john@example.com']);
     $stmt->execute(['Jane Smith', 'jane@example.com']);
-    
+
     // Fetch data
     $stmt = $pdo->query("SELECT * FROM users ORDER BY id");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     echo "<p>✅ PostgreSQL connection successful!</p>";
     echo "<p><strong>Database:</strong> $dbname</p>";
     echo "<p><strong>Host:</strong> $host:$port</p>";
-    
+
     echo "<h3>👥 Sample Users:</h3>";
     echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
     echo "<tr><th>ID</th><th>Name</th><th>Email</th><th>Created At</th></tr>";
@@ -71,7 +64,7 @@ try {
         echo "</tr>";
     }
     echo "</table>";
-    
+
 } catch (PDOException $e) {
     echo "<p>❌ Database connection failed: " . htmlspecialchars($e->getMessage()) . "</p>";
 }
@@ -88,11 +81,11 @@ if (extension_loaded('redis')) {
         $redis->connect($redis_host, $redis_port);
         $redis->set('test_key', 'Hello from Laravel PHP 8.4!');
         $value = $redis->get('test_key');
-        
+
         echo "<p>✅ Redis connection successful!</p>";
         echo "<p><strong>Host:</strong> $redis_host:$redis_port</p>";
         echo "<p><strong>Test Value:</strong> " . htmlspecialchars($value) . "</p>";
-        
+
     } catch (Exception $e) {
         echo "<p>❌ Redis connection failed: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
@@ -116,7 +109,7 @@ echo "<p><strong>Enum Example:</strong> " . Status::ACTIVE->value . "</p>";
 $status = Status::ACTIVE;
 $message = match($status) {
     Status::ACTIVE => "User is active",
-    Status::INACTIVE => "User is inactive", 
+    Status::INACTIVE => "User is inactive",
     Status::PENDING => "User is pending"
 };
 

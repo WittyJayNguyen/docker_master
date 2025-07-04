@@ -5,7 +5,7 @@
  */
 
 // Display PHP version and loaded extensions
-echo "<h1>🔧 Laravel PHP 7.4 + PostgreSQL Example</h1>";
+echo "<h1>🚀 Laravel PHP 7.4 + PostgreSQL Example</h1>";
 echo "<div style='font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;'>";
 
 // PHP Information
@@ -24,57 +24,47 @@ $username = $_ENV['DB_USERNAME'] ?? 'postgres_user';
 $password = $_ENV['DB_PASSWORD'] ?? 'postgres_pass';
 
 try {
-    $dsn = "pgsql:host=$host;port=$port;dbname=postgres"; // Connect to default DB first
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Create database if not exists
-    $pdo->exec("CREATE DATABASE $dbname");
-    echo "<p>✅ Database '$dbname' created or already exists</p>";
-    
-    // Connect to our database
+    // Connect directly to our database (no CREATE DATABASE)
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
     $pdo = new PDO($dsn, $username, $password);
-    
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     // Create sample table
     $pdo->exec("
-        CREATE TABLE IF NOT EXISTS products (
+        CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
-            price DECIMAL(10,2) NOT NULL,
-            category VARCHAR(50),
+            email VARCHAR(100) UNIQUE NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
-    
+
     // Insert sample data
-    $stmt = $pdo->prepare("INSERT INTO products (name, price, category) VALUES (?, ?, ?) ON CONFLICT DO NOTHING");
-    $stmt->execute(['Laptop', 999.99, 'Electronics']);
-    $stmt->execute(['Coffee Mug', 15.50, 'Kitchen']);
-    $stmt->execute(['Book', 25.00, 'Education']);
-    
+    $stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?) ON CONFLICT (email) DO NOTHING");
+    $stmt->execute(['John Doe', 'john@example.com']);
+    $stmt->execute(['Jane Smith', 'jane@example.com']);
+
     // Fetch data
-    $stmt = $pdo->query("SELECT * FROM products ORDER BY id");
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+    $stmt = $pdo->query("SELECT * FROM users ORDER BY id");
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     echo "<p>✅ PostgreSQL connection successful!</p>";
     echo "<p><strong>Database:</strong> $dbname</p>";
     echo "<p><strong>Host:</strong> $host:$port</p>";
-    
-    echo "<h3>🛍️ Sample Products:</h3>";
+
+    echo "<h3>👥 Sample Users:</h3>";
     echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-    echo "<tr><th>ID</th><th>Name</th><th>Price</th><th>Category</th><th>Created At</th></tr>";
-    foreach ($products as $product) {
+    echo "<tr><th>ID</th><th>Name</th><th>Email</th><th>Created At</th></tr>";
+    foreach ($users as $user) {
         echo "<tr>";
-        echo "<td>" . htmlspecialchars($product['id']) . "</td>";
-        echo "<td>" . htmlspecialchars($product['name']) . "</td>";
-        echo "<td>$" . htmlspecialchars($product['price']) . "</td>";
-        echo "<td>" . htmlspecialchars($product['category']) . "</td>";
-        echo "<td>" . htmlspecialchars($product['created_at']) . "</td>";
+        echo "<td>" . htmlspecialchars($user['id']) . "</td>";
+        echo "<td>" . htmlspecialchars($user['name']) . "</td>";
+        echo "<td>" . htmlspecialchars($user['email']) . "</td>";
+        echo "<td>" . htmlspecialchars($user['created_at']) . "</td>";
         echo "</tr>";
     }
     echo "</table>";
-    
+
 } catch (PDOException $e) {
     echo "<p>❌ Database connection failed: " . htmlspecialchars($e->getMessage()) . "</p>";
 }
@@ -89,13 +79,13 @@ if (extension_loaded('redis')) {
     try {
         $redis = new Redis();
         $redis->connect($redis_host, $redis_port);
-        $redis->set('php74_test', 'Hello from Laravel PHP 7.4!');
-        $value = $redis->get('php74_test');
-        
+        $redis->set('test_key', 'Hello from Laravel PHP 7.4!');
+        $value = $redis->get('test_key');
+
         echo "<p>✅ Redis connection successful!</p>";
         echo "<p><strong>Host:</strong> $redis_host:$redis_port</p>";
         echo "<p><strong>Test Value:</strong> " . htmlspecialchars($value) . "</p>";
-        
+
     } catch (Exception $e) {
         echo "<p>❌ Redis connection failed: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
@@ -106,16 +96,29 @@ if (extension_loaded('redis')) {
 // PHP 7.4 Features Demo
 echo "<h2>✨ PHP 7.4 Features Demo</h2>";
 
-// Arrow functions
+// Class constants (PHP 7.4 compatible)
+class Status {
+    const ACTIVE = 'active';
+    const INACTIVE = 'inactive';
+    const PENDING = 'pending';
+}
+
+echo "<p><strong>Class Constants:</strong> " . Status::ACTIVE . "</p>";
+
+// Arrow functions (PHP 7.4 feature)
 $numbers = [1, 2, 3, 4, 5];
 $squared = array_map(fn($n) => $n * $n, $numbers);
 echo "<p><strong>Arrow Functions:</strong> [" . implode(', ', $squared) . "]</p>";
 
-// Typed properties (class example)
+// Null coalescing assignment (PHP 7.4 feature)
+$config = [];
+$config['timeout'] ??= 30;
+echo "<p><strong>Null Coalescing Assignment:</strong> timeout = " . $config['timeout'] . "</p>";
+
+// Typed properties (PHP 7.4 feature)
 class User {
     public string $name;
     public int $age;
-    public ?string $email = null;
     
     public function __construct(string $name, int $age) {
         $this->name = $name;
@@ -124,16 +127,12 @@ class User {
 }
 
 $user = new User("John Doe", 30);
-$user->email = "john@example.com";
+echo "<p><strong>Typed Properties:</strong> {$user->name} is {$user->age} years old</p>";
 
-echo "<p><strong>Typed Properties:</strong> {$user->name}, {$user->age}, {$user->email}</p>";
-
-// Null coalescing assignment
-$config = [];
-$config['timeout'] ??= 30;
-$config['retries'] ??= 3;
-
-echo "<p><strong>Null Coalescing Assignment:</strong> timeout={$config['timeout']}, retries={$config['retries']}</p>";
+// Spread operator in array expressions (PHP 7.4 feature)
+$parts = ['apple', 'pear'];
+$fruits = ['banana', ...$parts, 'cherry'];
+echo "<p><strong>Spread Operator:</strong> [" . implode(', ', $fruits) . "]</p>";
 
 // Loaded Extensions
 echo "<h2>🔧 Loaded Extensions</h2>";
