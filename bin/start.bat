@@ -116,5 +116,12 @@ echo 🌐 Opening main dashboard...
 start http://localhost:8090
 
 echo.
-echo ✅ All services are running! Press any key to exit...
+echo ✅ All services are running!
+echo.
+echo 💡 Troubleshooting:
+echo    • If phpMyAdmin shows "Cannot connect": run scripts\fix-database-corruption.bat
+echo    • If services not responding: wait 2-3 minutes for full startup
+echo    • For other issues: see TROUBLESHOOTING.md
+echo.
+echo Press any key to exit...
 pause >nul
