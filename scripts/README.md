@@ -1,5 +1,23 @@
 # 🛠️ Scripts Directory
 
+## 🚨 Most Important Script
+
+**`fix-database-corruption.bat`** - **Khắc phục lỗi database connection**
+```bash
+scripts\fix-database-corruption.bat
+```
+- ✅ **Tự động khắc phục** lỗi phpMyAdmin "Cannot connect"
+- ✅ **Reset database** directories bị corrupted
+- ✅ **Restart services** với fresh databases
+- ⚠️ **Sẽ xóa** tất cả database data
+
+**Sử dụng khi:**
+- phpMyAdmin báo "Không thể kết nối"
+- MySQL/PostgreSQL containers restart liên tục
+- Services "Not responding" trong status check
+
+---
+
 ## 📋 Available Scripts
 
 ### 🖥️ Cross-Platform Scripts

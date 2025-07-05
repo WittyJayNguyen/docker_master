@@ -60,4 +60,8 @@ echo    • Stop all:     bin\stop.bat
 echo    • Restart all:  bin\restart.bat
 echo    • Monitor RAM:  scripts\monitor-ram.bat
 echo.
+echo 🚨 Troubleshooting:
+echo    • Database issues: scripts\fix-database-corruption.bat
+echo    • Full guide: TROUBLESHOOTING.md
+echo.
 pause

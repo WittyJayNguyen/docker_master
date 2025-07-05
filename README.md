@@ -89,6 +89,26 @@ bin\status.bat
 bin\stop.bat
 ```
 
+### ⚠️ Troubleshooting - Database Connection Issues
+
+**Nếu gặp lỗi phpMyAdmin "Không thể kết nối" hoặc MySQL/PostgreSQL không start:**
+
+```bash
+# Chạy script tự động khắc phục
+scripts\fix-database-corruption.bat
+```
+
+**Nguyên nhân thường gặp:**
+- Database files bị corrupted sau khi Git operations
+- Containers restart liên tục
+- Services không thể connect đến database
+
+**Script sẽ tự động:**
+- ✅ Stop tất cả services
+- ✅ Xóa database directories bị corrupted
+- ✅ Tạo lại fresh databases
+- ✅ Restart tất cả services
+
 ### Development
 ```bash
 # Monitor RAM usage
@@ -116,6 +136,8 @@ start http://localhost:8081  # pgAdmin
 
 ## 📚 Documentation
 
+- **[🆘 QUICK HELP](QUICK-HELP.md)** - Emergency commands & common issues
+- **[🚨 TROUBLESHOOTING](TROUBLESHOOTING.md)** - Detailed problem solving
 - **[RAM Optimization](docs/07-RAM-OPTIMIZATION.md)** - Chi tiết tối ưu RAM
 - **[Auto-Monitoring](docs/08-AUTO-MONITORING.md)** - Hệ thống monitoring
 - **[Scripts Guide](scripts/README.md)** - Utility scripts
