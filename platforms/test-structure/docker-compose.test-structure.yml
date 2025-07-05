@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  test-structure:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: test-structure_php74
+    restart: unless-stopped
+    ports:
+      - "8015:80"
+      - "9015:9003"
+    volumes:
+      - ../../projects/test-structure:/var/www/html
+      - ../../logs/apache/test-structure:/var/log/apache2
+      - ../../data/uploads/test-structure:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=74
+      - PHP_MEMORY_LIMIT=96M
+      - DB_HOST=postgres_low_ram
+      - DB_DATABASE=test_structure_db
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_low_ram
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - docker_master_low_ram
+    external_links:
+      - postgres_low_ram:postgres_low_ram
+      - redis_low_ram:redis_low_ram
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  docker_master_low_ram:
+    external: true
