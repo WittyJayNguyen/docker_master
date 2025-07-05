@@ -1,153 +1,68 @@
-# Docker Master Platform - Git Ignore File
+# Docker Master Platform - Git Ignore Rules
 
-# ===========================================
-# Docker Data Directories (NEVER COMMIT!)
-# ===========================================
+# Docker data directories
+data/
+!data/.gitkeep
 
-# Database data - contains sensitive info and large files
+# MySQL specific files
 data/mysql/
-data/postgres/
-data/redis/
-data/pgadmin/
-data/uploads/
+*.sock
+*.pid
+*.log
+auto.cnf
+binlog.*
+ib_*
+mysql.sock*
 
-# Application logs - generated at runtime
+# PostgreSQL specific files
+data/postgres/
+postmaster.pid
+postgresql.conf.backup
+
+# Redis specific files
+data/redis/
+dump.rdb
+appendonly.aof
+
+# Log directories
 logs/
-logs/**/*.log
+!logs/.gitkeep
+config/logs/
 *.log
 
-# Backup files
-backups/
-*.sql
-*.dump
+# Temporary files
+*.tmp
+*.bak
 *.backup
+*~
+.DS_Store
+Thumbs.db
 
-# ===========================================
-# Development Files
-# ===========================================
+# Docker specific
+.docker/
+docker-compose.override.yml
 
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
-# OS generated files
+# OS specific
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
-
-# Windows
 desktop.ini
 
-# ===========================================
-# Docker & Environment
-# ===========================================
+# Project specific
+projects/*/vendor/
+projects/*/node_modules/
+projects/*/storage/logs/
+projects/*/storage/framework/cache/
+projects/*/storage/framework/sessions/
+projects/*/storage/framework/views/
+projects/*/.env
 
-# Docker override files (may contain sensitive data)
-docker-compose.override.local.yml
-.env.local
-.env.production
-
-# Docker volumes
-volumes/
-
-# ===========================================
-# Application Specific
-# ===========================================
-
-# Laravel
-vendor/
-node_modules/
-.env
-storage/logs/
-storage/framework/cache/
-storage/framework/sessions/
-storage/framework/views/
-bootstrap/cache/
-
-# WordPress
-wp-config.php
-wp-content/uploads/
-wp-content/cache/
-
-# ===========================================
-# Temporary Files
-# ===========================================
-
-# Temporary files
-*.tmp
-*.temp
+# Backup files
+*.backup
 *.bak
-*.old
-*.orig
-
-# Cache files
-*.cache
-cache/
-
-# ===========================================
-# Security & Sensitive Data
-# ===========================================
-
-# SSL certificates
-*.pem
-*.key
-*.crt
-*.csr
-
-# SSH keys
-id_rsa
-id_rsa.pub
-*.ppk
-
-# Environment variables with secrets
-.env.secret
-secrets/
-
-# ===========================================
-# Build & Distribution
-# ===========================================
-
-# Build outputs
-dist/
-build/
-out/
-
-# Package files
-*.tar.gz
-*.zip
-*.rar
-
-# ===========================================
-# Project Specific Ignores
-# ===========================================
-
-# Files with special characters (like the 90%) file we removed)
-*%*
-*)*
-*(*
-
-# Auto-generated documentation
-docs/auto-generated/
-
-# Test coverage
-coverage/
-*.coverage
-
-# ===========================================
-# Keep These Directories But Ignore Contents
-# ===========================================
-
-# Keep directory structure but ignore contents
-data/*
-!data/.gitkeep
-logs/*
-!logs/.gitkeep
-backups/*
-!backups/.gitkeep
+*~

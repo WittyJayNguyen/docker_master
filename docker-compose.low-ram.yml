@@ -1,21 +1,24 @@
 version: '3.8'
 
-# Low RAM Profile - Chỉ chạy services cần thiết
-# Dành cho máy có 4GB RAM hoặc ít hơn
-# Tổng RAM usage: ~1-2GB
+# Docker Master - Low RAM Configuration
+# Optimized for systems with 4GB RAM or less
+# Total RAM usage: ~448MB (6 containers)
+# PHP 8.4: Laravel (128MB) + PHP 7.4: Laravel (128MB) + WordPress (128MB)
+# PostgreSQL (128MB) + Redis (32MB) + Mailhog (32MB)
+# Note: All services use PostgreSQL (no MySQL to save RAM)
 
 services:
-  # PostgreSQL - tối ưu tối đa
+  # PostgreSQL - optimized for low memory
   postgres:
     image: postgres:15
-    container_name: postgres_server
+    container_name: postgres_low_ram
     restart: unless-stopped
     ports:
       - "5432:5432"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=docker_master
       - POSTGRES_USER=postgres_user
       - POSTGRES_PASSWORD=postgres_pass
       - POSTGRES_SHARED_BUFFERS=16MB
@@ -30,12 +33,12 @@ services:
         reservations:
           memory: 64M
     networks:
-      - app-network
+      - low-ram-network
 
-  # Redis - cấu hình tối thiểu
+  # Redis - minimal configuration
   redis:
     image: redis:7-alpine
-    container_name: redis_server
+    container_name: redis_low_ram
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -49,35 +52,35 @@ services:
         reservations:
           memory: 16M
     networks:
-      - app-network
+      - low-ram-network
 
-  # Chỉ chạy Laravel PHP 8.4 (version mới nhất)
-  laravel-php84-psql:
+  # Laravel PHP 8.4 - single optimized container
+  laravel-php84:
     build:
       context: ./docker/php84
       dockerfile: Dockerfile
-    container_name: laravel_php84_psql_app
+    container_name: laravel_php84_low_ram
     restart: unless-stopped
     ports:
       - "8010:80"
       - "9084:9003"  # Xdebug port
     volumes:
-      - ./projects/laravel-php84-psql:/app/laravel-php84-psql
-      - ./logs/apache/laravel-php84-psql:/var/log/apache2
-      - ./data/uploads/laravel-php84-psql:/app/uploads
+      - ./projects/laravel-php84-psql:/var/www/html
+      - ./logs/apache/laravel-php84:/var/log/apache2
+      - ./data/uploads/laravel-php84:/app/uploads
     environment:
-      - WEB_DOCUMENT_ROOT=/app/laravel-php84-psql
+      - WEB_DOCUMENT_ROOT=/var/www/html
       - PHP_VERSION=8.4
       - PHP_MEMORY_LIMIT=96M
       - PHP_OPCACHE_MEMORY_CONSUMPTION=32
       - PHP_OPCACHE_MAX_ACCELERATED_FILES=1000
       - DB_CONNECTION=pgsql
-      - DB_HOST=postgres_server
+      - DB_HOST=postgres_low_ram
       - DB_PORT=5432
       - DB_DATABASE=laravel_php84_psql
       - DB_USERNAME=postgres_user
       - DB_PASSWORD=postgres_pass
-      - REDIS_HOST=redis_server
+      - REDIS_HOST=redis_low_ram
       - REDIS_PORT=6379
     deploy:
       resources:
@@ -86,7 +89,7 @@ services:
         reservations:
           memory: 96M
     networks:
-      - app-network
+      - low-ram-network
     depends_on:
       - postgres
       - redis
@@ -94,12 +97,102 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 30s
       timeout: 10s
-      - retries: 3
+      retries: 3
 
-  # Mailhog - chỉ khi cần test email
+  # Laravel PHP 7.4 - optimized container
+  laravel-php74:
+    build:
+      context: ./docker/php74
+      dockerfile: Dockerfile
+    container_name: laravel_php74_low_ram
+    restart: unless-stopped
+    ports:
+      - "8020:80"
+      - "9074:9003"  # Xdebug port
+    volumes:
+      - ./projects/laravel-php74-psql:/var/www/html
+      - ./logs/apache/laravel-php74:/var/log/apache2
+      - ./data/uploads/laravel-php74:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=7.4
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=1000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_low_ram
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php74_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_low_ram
+      - REDIS_PORT=6379
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 96M
+    networks:
+      - low-ram-network
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # WordPress PHP 7.4 - optimized container (using PostgreSQL)
+  wordpress-php74:
+    build:
+      context: ./docker/php74
+      dockerfile: Dockerfile
+    container_name: wordpress_php74_low_ram
+    restart: unless-stopped
+    ports:
+      - "8030:80"
+      - "9075:9003"  # Xdebug port (different from Laravel 7.4)
+    volumes:
+      - ./projects/wordpress-php74-mysql:/var/www/html
+      - ./logs/apache/wordpress-php74:/var/log/apache2
+      - ./data/uploads/wordpress-php74:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=7.4
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=1000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_low_ram
+      - DB_PORT=5432
+      - DB_DATABASE=wordpress_php74
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 96M
+    networks:
+      - low-ram-network
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+
+  # Mailhog - lightweight email testing
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: mailhog
+    container_name: mailhog_low_ram
     restart: unless-stopped
     ports:
       - "1025:1025"   # SMTP
@@ -111,15 +204,17 @@ services:
         reservations:
           memory: 16M
     networks:
-      - app-network
+      - low-ram-network
 
 # Network
 networks:
-  app-network:
+  low-ram-network:
     driver: bridge
-    name: docker_master_network
+    name: docker_master_low_ram
 
-# Volumes
+# Volumes for data persistence
 volumes:
   postgres_data:
+    driver: local
   redis_data:
+    driver: local

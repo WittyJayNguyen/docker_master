@@ -1,11 +1,11 @@
 <?php
 /**
- * WordPress PHP 7.4 + MySQL Example
- * Demo application showing WordPress-style setup with MySQL connection
+ * WordPress PHP 7.4 + PostgreSQL Example
+ * Demo application showing WordPress-style setup with PostgreSQL connection
  */
 
 // Display PHP version and loaded extensions
-echo "<h1>📝 WordPress PHP 7.4 + MySQL Example</h1>";
+echo "<h1>📝 WordPress PHP 7.4 + PostgreSQL Example</h1>";
 echo "<div style='font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;'>";
 
 // PHP Information
@@ -15,59 +15,49 @@ echo "<p><strong>Server:</strong> " . $_SERVER['SERVER_SOFTWARE'] . "</p>";
 echo "<p><strong>Document Root:</strong> " . $_SERVER['DOCUMENT_ROOT'] . "</p>";
 
 // Database Connection Test
-echo "<h2>🗄️ MySQL Connection Test</h2>";
+echo "<h2>🗄️ PostgreSQL Connection Test</h2>";
 
-$host = $_ENV['WORDPRESS_DB_HOST'] ?? 'mysql_server';
-$dbname = $_ENV['WORDPRESS_DB_NAME'] ?? 'wordpress_php74_mysql';
-$username = $_ENV['WORDPRESS_DB_USER'] ?? 'root';
-$password = $_ENV['WORDPRESS_DB_PASSWORD'] ?? 'rootpassword123';
+$host = $_ENV['DB_HOST'] ?? 'postgres_low_ram';
+$dbname = $_ENV['DB_DATABASE'] ?? 'wordpress_php74';
+$username = $_ENV['DB_USERNAME'] ?? 'postgres_user';
+$password = $_ENV['DB_PASSWORD'] ?? 'postgres_pass';
 
 try {
-    // Connect to MySQL server
-    $dsn = "mysql:host=$host;charset=utf8mb4";
+    // Connect to PostgreSQL server
+    $dsn = "pgsql:host=$host;port=5432;dbname=$dbname";
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    echo "<p>✅ Connected to PostgreSQL database '$dbname'</p>";
     
-    // Create database if not exists
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    echo "<p>✅ Database '$dbname' created or already exists</p>";
-    
-    // Connect to our database
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
-    $pdo = new PDO($dsn, $username, $password);
-    
-    // Create WordPress-style tables
+    // Create WordPress-style tables for PostgreSQL
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS wp_posts (
-            ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-            post_title text NOT NULL,
-            post_content longtext NOT NULL,
-            post_status varchar(20) NOT NULL DEFAULT 'publish',
-            post_type varchar(20) NOT NULL DEFAULT 'post',
-            post_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (ID)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ID SERIAL PRIMARY KEY,
+            post_title TEXT NOT NULL,
+            post_content TEXT NOT NULL,
+            post_status VARCHAR(20) NOT NULL DEFAULT 'publish',
+            post_type VARCHAR(20) NOT NULL DEFAULT 'post',
+            post_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
     ");
-    
+
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS wp_users (
-            ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-            user_login varchar(60) NOT NULL,
-            user_email varchar(100) NOT NULL,
-            user_registered datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            display_name varchar(250) NOT NULL,
-            PRIMARY KEY (ID),
-            UNIQUE KEY user_login (user_login),
-            UNIQUE KEY user_email (user_email)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ID SERIAL PRIMARY KEY,
+            user_login VARCHAR(60) NOT NULL UNIQUE,
+            user_email VARCHAR(100) NOT NULL UNIQUE,
+            user_registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            display_name VARCHAR(250) NOT NULL
+        )
     ");
     
-    // Insert sample data
-    $stmt = $pdo->prepare("INSERT IGNORE INTO wp_users (user_login, user_email, display_name) VALUES (?, ?, ?)");
+    // Insert sample data (PostgreSQL style)
+    $stmt = $pdo->prepare("INSERT INTO wp_users (user_login, user_email, display_name) VALUES (?, ?, ?) ON CONFLICT (user_login) DO NOTHING");
     $stmt->execute(['admin', 'admin@example.com', 'Administrator']);
     $stmt->execute(['editor', 'editor@example.com', 'Content Editor']);
-    
-    $stmt = $pdo->prepare("INSERT IGNORE INTO wp_posts (post_title, post_content, post_type) VALUES (?, ?, ?)");
+
+    $stmt = $pdo->prepare("INSERT INTO wp_posts (post_title, post_content, post_type) VALUES (?, ?, ?) ON CONFLICT DO NOTHING");
     $stmt->execute(['Welcome to WordPress', 'This is your first post. Edit or delete it, then start writing!', 'post']);
     $stmt->execute(['Sample Page', 'This is an example page. Unlike posts, pages are better suited for more timeless content.', 'page']);
     
@@ -78,9 +68,9 @@ try {
     $stmt = $pdo->query("SELECT * FROM wp_users ORDER BY ID");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo "<p>✅ MySQL connection successful!</p>";
+    echo "<p>✅ PostgreSQL connection successful!</p>";
     echo "<p><strong>Database:</strong> $dbname</p>";
-    echo "<p><strong>Host:</strong> $host</p>";
+    echo "<p><strong>Host:</strong> $host:5432</p>";
     
     echo "<h3>👥 WordPress Users:</h3>";
     echo "<table border='1' style='border-collapse: collapse; width: 100%; margin-bottom: 20px;'>";
@@ -157,7 +147,7 @@ foreach ($extensions as $ext) {
 echo "</div>";
 
 echo "<hr>";
-echo "<p><em>🐳 Running in Docker container with PHP " . phpversion() . " and MySQL</em></p>";
-echo "<p><em>📝 Ready for WordPress installation!</em></p>";
+echo "<p><em>🐳 Running in Docker container with PHP " . phpversion() . " and PostgreSQL</em></p>";
+echo "<p><em>📝 Ready for WordPress installation with PostgreSQL!</em></p>";
 echo "</div>";
 ?>
