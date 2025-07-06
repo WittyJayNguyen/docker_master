@@ -17,7 +17,7 @@ echo "<p><strong>Document Root:</strong> " . $_SERVER['DOCUMENT_ROOT'] . "</p>";
 // Database Connection Test
 echo "<h2>🗄️ PostgreSQL Connection Test</h2>";
 
-$host = $_ENV['DB_HOST'] ?? 'postgres_server';
+$host = $_ENV['DB_HOST'] ?? 'postgres_low_ram';
 $port = $_ENV['DB_PORT'] ?? '5432';
 $dbname = $_ENV['DB_DATABASE'] ?? 'laravel_php84_psql';
 $username = $_ENV['DB_USERNAME'] ?? 'postgres_user';

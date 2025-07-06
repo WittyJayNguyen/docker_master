@@ -34,6 +34,11 @@
    - Cách khắc phục
    - Debug containers
 
+7. **[Auto-Discovery Platform](07-AUTO-DISCOVERY.md)** 🤖
+   - Tạo platform với 1 lệnh
+   - AI tự động phát hiện loại platform
+   - Hướng dẫn sử dụng Auto-Discovery
+
 ## 🚀 Quick Access
 
 ### URLs chính
@@ -46,6 +51,9 @@
 
 ### Commands nhanh
 ```bash
+# Tạo platform mới (AUTO-DISCOVERY)
+create.bat my-shop
+
 # Setup lần đầu
 .\scripts\setup.bat
 
@@ -67,6 +75,7 @@ docker-compose ps
 | [04-DEBUG-SETUP.md](04-DEBUG-SETUP.md) | Cấu hình debug Xdebug | Developer |
 | [05-SYSTEM-MANAGEMENT.md](05-SYSTEM-MANAGEMENT.md) | Quản lý hệ thống | Admin |
 | [06-TROUBLESHOOTING.md](06-TROUBLESHOOTING.md) | Khắc phục sự cố | Tất cả |
+| [07-AUTO-DISCOVERY.md](07-AUTO-DISCOVERY.md) | Auto-Discovery Platform | Tất cả |
 | [07-RAM-OPTIMIZATION.md](07-RAM-OPTIMIZATION.md) | Tối ưu RAM (4GB→2GB) | Admin |
 | [08-AUTO-MONITORING.md](08-AUTO-MONITORING.md) | Auto-monitor 24/7 | Admin |
 
