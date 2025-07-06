@@ -5,6 +5,29 @@ Tổng hợp tất cả commands để quản lý Docker Development Environment
 ## 🚀 Management Scripts
 
 ### **Windows Commands:**
+
+**🚀 Quick Scripts (Recommended):**
+```cmd
+# Quick start with auto-optimization
+bin\start.bat
+
+# Stop all services
+bin\stop.bat
+
+# Restart all services
+bin\restart.bat
+
+# Show comprehensive status
+bin\status.bat
+
+# Complete environment reset (DANGEROUS)
+bin\reset.bat
+
+# Auto RAM optimization
+bin\auto-optimize.bat
+```
+
+**🔧 Detailed Management (dev.bat):**
 ```cmd
 # Start environment (with auto-optimization)
 bin\dev.bat start

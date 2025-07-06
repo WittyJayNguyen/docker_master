@@ -90,7 +90,18 @@ bin\setup.bat           # Windows
 ./bin/setup.sh          # Linux/macOS
 ```
 
-**🚀 Cho người có kinh nghiệm (Manual Setup):**
+**🚀 Cho người có kinh nghiệm (Quick Scripts):**
+```bash
+# 1. Clone repository
+git clone <repository-url> docker-dev-env
+cd docker-dev-env
+
+# 2. Quick start (auto-optimization included)
+bin\start.bat           # Windows
+./bin/start.sh          # Linux/macOS
+```
+
+**🔧 Manual Setup (Advanced):**
 ```bash
 # 1. Clone repository
 git clone <repository-url> docker-dev-env
@@ -107,6 +118,25 @@ bin\dev.bat start       # Windows
 
 ### 🎯 **Cho người mới bắt đầu:**
 👉 **Chạy setup script hoặc đọc [STEP_BY_STEP.md](STEP_BY_STEP.md)** để có hướng dẫn chi tiết từng bước
+
+## 🔧 Quick Commands
+
+### **🚀 Essential Scripts (Windows):**
+```cmd
+bin\start.bat           # Quick start with auto-optimization
+bin\stop.bat            # Stop all services
+bin\restart.bat         # Restart all services
+bin\status.bat          # Show comprehensive status
+bin\reset.bat           # Complete reset (DANGEROUS)
+```
+
+### **📊 Management:**
+```cmd
+bin\dev.bat status      # Service status
+bin\dev.bat logs        # View logs
+bin\dev.bat shell php84 # Access container
+bin\dev.bat create-project myapp php84 public
+```
 
 ## 📖 Hướng dẫn sử dụng
 
