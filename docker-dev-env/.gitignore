@@ -1,0 +1,60 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database data
+database/mysql/data/*
+!database/mysql/data/.gitkeep
+database/postgresql/data/*
+!database/postgresql/data/.gitkeep
+database/redis/data/*
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Projects (optional - you may want to track your projects)
+www/*
+!www/.gitkeep
+
+# Auto-generated nginx configs
+nginx/sites/*.local.conf
+
+# RAM optimization cache
+.ram-optimized
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Docker volumes
+volumes/
+
+# Backup files
+*.bak
+*.backup
+*.sql.gz
+
+# Node modules (if any)
+node_modules/
+
+# Composer vendor (if any)
+vendor/
