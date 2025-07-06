@@ -1,3 +1,0 @@
-# This file keeps the backups/ directory in Git
-# The actual backup files are ignored by .gitignore
-# This ensures the directory structure is preserved
