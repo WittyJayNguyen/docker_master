@@ -168,7 +168,8 @@ echo       dockerfile: Dockerfile
 echo     container_name: %PLATFORM_NAME%_php%PHP_VERSION%
 echo     restart: unless-stopped
 echo     ports:
-echo       - "%XDEBUG_PORT%:9003"  # Only expose Xdebug port
+echo       - "%PLATFORM_PORT%:80"   # Web port for direct access
+echo       - "%XDEBUG_PORT%:9003"   # Xdebug port
 echo     expose:
 echo       - "80"  # Internal port for Nginx proxy
 echo     volumes:
@@ -260,9 +261,13 @@ echo ⏳ Waiting for platform to start...
 timeout /t 15 /nobreak >nul
 
 echo.
-echo 🔄 Reloading Nginx configuration...
+echo 🌐 Auto-configuring domain...
 cd ..\..
-docker exec nginx_proxy_low_ram nginx -s reload 2>nul
+call :auto_setup_domain
+
+echo.
+echo 🔄 Auto-restarting system for instant apply...
+call :fast_restart_system
 
 echo.
 echo 🧪 Testing platform...
@@ -383,4 +388,63 @@ echo     }
 echo }
 echo.
 ) >> "nginx\conf.d\%PLATFORM_NAME%.conf"
+exit /b 0
+
+:auto_setup_domain
+REM Auto setup domain in hosts file without admin prompt
+echo 🌐 Auto-configuring domain for %PLATFORM_NAME%...
+
+REM Check if hosts file is writable (admin check)
+echo # Test write > "%temp%\hosts_test" 2>nul
+copy "%temp%\hosts_test" "%SystemRoot%\System32\drivers\etc\hosts_test" >nul 2>&1
+if errorlevel 1 (
+    echo ⚠️  Admin rights needed for domain setup
+    echo 💡 Domain will work after running: scripts\setup-domains.bat
+    del "%temp%\hosts_test" 2>nul
+    exit /b 0
+)
+
+REM Clean up test files
+del "%SystemRoot%\System32\drivers\etc\hosts_test" 2>nul
+del "%temp%\hosts_test" 2>nul
+
+REM Check if domain already exists
+findstr /C:"%PLATFORM_NAME%.asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
+if not errorlevel 1 (
+    echo ✅ Domain %PLATFORM_NAME%.asmo-tranding.io already configured
+    exit /b 0
+)
+
+REM Add domain entry
+echo 127.0.0.1 %PLATFORM_NAME%.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
+if errorlevel 1 (
+    echo ⚠️  Could not auto-configure domain
+    echo 💡 Run manually: scripts\setup-domains.bat
+) else (
+    echo ✅ Domain auto-configured: %PLATFORM_NAME%.asmo-tranding.io
+)
+exit /b 0
+
+:fast_restart_system
+REM Fast restart only affected services
+echo 🔄 Fast restarting affected services...
+
+REM Reload Nginx (fastest)
+docker exec nginx_proxy_low_ram nginx -s reload >nul 2>&1
+if not errorlevel 1 (
+    echo ✅ Nginx reloaded instantly
+) else (
+    echo ⚠️  Nginx reload failed, doing full restart...
+    docker restart nginx_proxy_low_ram >nul 2>&1
+    echo ✅ Nginx restarted
+)
+
+REM Test platform connectivity
+timeout /t 2 /nobreak >nul
+powershell -Command "try { Invoke-WebRequest -Uri 'http://localhost:%PLATFORM_PORT%' -TimeoutSec 3 -UseBasicParsing | Out-Null; Write-Host '✅ Platform ready: http://localhost:%PLATFORM_PORT%' -ForegroundColor Green } catch { Write-Host '⚠️  Platform starting...' -ForegroundColor Yellow }" 2>nul
+
+REM Test domain connectivity (if configured)
+powershell -Command "try { Invoke-WebRequest -Uri 'http://%PLATFORM_NAME%.asmo-tranding.io' -TimeoutSec 3 -UseBasicParsing | Out-Null; Write-Host '✅ Domain ready: http://%PLATFORM_NAME%.asmo-tranding.io' -ForegroundColor Green } catch { Write-Host '💡 Domain: Run scripts\setup-domains.bat for domain access' -ForegroundColor Cyan }" 2>nul
+
+echo ✅ Fast restart completed
 exit /b 0

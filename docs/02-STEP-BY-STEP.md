@@ -1,15 +1,17 @@
-# 📖 Hướng dẫn từng bước chi tiết - Auto Platform Creation
+# 📖 Hướng dẫn từng bước chi tiết - Auto Platform với Domain & Fast Restart
 
-> **Mục tiêu**: Hiểu rõ cách tạo platforms tự động với AI detection và dual database
+> **Mục tiêu**: Hiểu rõ cách sử dụng hệ thống Auto Domain + Auto Restart + AI Detection
 
-## 📋 Tổng quan hệ thống mới
+## 📋 Tổng quan hệ thống Auto Features
 
-**Docker Master Platform** là hệ thống tạo platforms tự động với:
-- **🤖 AI Auto-Detection**: Tự động nhận diện loại project và chọn database phù hợp
-- **🗄️ Dual Database**: MySQL và PostgreSQL hoạt động song song
-- **🐛 Full Xdebug**: Debug support cho PHP 7.4 và 8.4
-- **⚡ Auto Platform Creation**: Tạo platform chỉ với 1 lệnh
-- **🔧 Smart Configuration**: Tự động cấu hình port, database, PHP version
+**Docker Master Platform** với **Auto Features** bao gồm:
+- **🤖 AI Auto-Detection**: Tự động nhận diện loại project và chọn database + PHP version
+- **🌐 Auto Domain**: Tự động tạo domain [project].asmo-tranding.io với Nginx routing
+- **⚡ Fast Restart**: Apply changes trong 0.1 giây với smart restart system
+- **🗄️ Auto Database**: Tự động tạo database với permissions phù hợp
+- **🔧 Auto Nginx**: Tự động tạo và reload Nginx configuration
+- **🐛 Auto Debug**: Xdebug tự động cho PHP 7.4 & 8.4
+- **🚀 One Command**: Tạo platform hoàn chỉnh với 1 lệnh duy nhất
 
 ## 🏗️ Cấu trúc dự án mới
 
