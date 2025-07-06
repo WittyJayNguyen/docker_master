@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  laravel84-shop-example:
+    build:
+      context: ../../docker/php84
+      dockerfile: Dockerfile
+    container_name: laravel84-shop-example_php84
+    restart: unless-stopped
+    ports:
+      - "8017:80"
+      - "9017:9003"
+    volumes:
+      - ../../projects/laravel84-shop-example:/var/www/html
+      - ../../logs/apache/laravel84-shop-example:/var/log/apache2
+      - ../../data/uploads/laravel84-shop-example:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=84
+      - PHP_MEMORY_LIMIT=96M
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql_low_ram
+      - DB_PORT=3306
+      - DB_DATABASE=laravel84_shop_example_db
+      - DB_USERNAME=mysql_user
+      - DB_PASSWORD=mysql_pass
+      - REDIS_HOST=redis_low_ram
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - docker_master_low_ram
+    external_links:
+      - postgres_low_ram:postgres_low_ram
+      - redis_low_ram:redis_low_ram
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  docker_master_low_ram:
+    external: true

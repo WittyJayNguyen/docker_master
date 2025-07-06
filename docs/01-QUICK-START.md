@@ -1,6 +1,6 @@
-# ⚡ Bắt đầu nhanh - 5 phút chạy được dự án!
+# ⚡ Bắt đầu nhanh - 2 phút tạo platform!
 
-> **Mục tiêu**: Chạy được dự án trong 5 phút mà không cần hiểu gì cả!
+> **Mục tiêu**: Tạo được platform trong 2 phút với AI auto-detection!
 
 ## ✅ Yêu cầu
 
@@ -9,58 +9,80 @@
 
 **Chưa có Docker?** → Tải tại https://docker.com/products/docker-desktop
 
-## 🚀 3 bước đơn giản
+## 🚀 2 bước siêu đơn giản
 
-### Bước 1: Kiểm tra Docker
+### Bước 1: Khởi động Core Services
 Mở **Command Prompt** hoặc **PowerShell**:
-```bash
-docker --version
-```
-
-**Thấy version number?** ✅ Tiếp tục  
-**Báo lỗi?** ❌ Cài Docker Desktop trước
-
-### Bước 2: Setup dự án
 ```bash
 # Di chuyển vào thư mục dự án
 cd d:\www\docker_master
 
-# Chạy setup (chỉ cần 1 lần)
-.\scripts\setup.bat
+# Khởi động database services (MySQL + PostgreSQL)
+docker-compose -f docker-compose.low-ram.yml up -d
 ```
 
-**Đợi 2-3 phút** để Docker tải và build images...
+**Đợi 1-2 phút** để databases khởi động...
 
-### Bước 3: Khởi động
+### Bước 2: Tạo Platform Tự Động
 ```bash
-# Start tất cả services
-.\scripts\start.bat
+# Tạo WordPress blog (AI chọn MySQL + PHP 7.4)
+create.bat my-blog
+
+# Tạo Laravel API (AI chọn PostgreSQL + PHP 8.4)
+create.bat user-api
+
+# Tạo E-commerce store (AI chọn MySQL + PHP 8.4)
+create.bat online-shop
 ```
 
-**Đợi 1-2 phút** để containers khởi động...
+**🤖 AI sẽ tự động:**
+- Chọn database phù hợp (MySQL/PostgreSQL)
+- Chọn PHP version (7.4/8.4)
+- Assign ports tự động
+- Cấu hình Xdebug
+- Tạo database và container
 
-## 🎉 Xong! Truy cập ứng dụng
+## 🎉 Xong! Truy cập Platforms
 
 Mở browser và truy cập:
 
-| Ứng dụng | URL | Mô tả |
+| Platform | URL | Mô tả |
 |----------|-----|-------|
-| **Laravel mới nhất** | http://localhost:8010 | PHP 8.4 + PostgreSQL |
-| **Laravel cũ** | http://localhost:8011 | PHP 7.4 + PostgreSQL |
-| **WordPress** | http://localhost:8012 | CMS phổ biến |
-| **Quản lý MySQL** | http://localhost:8080 | phpMyAdmin |
-| **Quản lý PostgreSQL** | http://localhost:8081 | pgAdmin |
-| **Test Email** | http://localhost:8025 | Mailhog |
+| **WordPress Blog** | http://localhost:8015 | PHP 7.4 + MySQL + Xdebug |
+| **Laravel API** | http://localhost:8016 | PHP 8.4 + PostgreSQL + Xdebug |
+| **E-commerce Store** | http://localhost:8017 | PHP 8.4 + MySQL + Xdebug |
+## 🗄️ Database & Tools
 
-## 🔍 Kiểm tra hoạt động
+| Service | Connection | Credentials |
+|---------|------------|-------------|
+| **MySQL** | localhost:3306 | mysql_user / mysql_pass |
+| **PostgreSQL** | localhost:5432 | postgres_user / postgres_pass |
+| **Mailhog** | http://localhost:8025 | Email testing |
 
-### Test Laravel PHP 8.4
-1. Truy cập: http://localhost:8010
-2. **Thấy trang Laravel?** ✅ Thành công!
+## 🐛 Debug với VS Code
 
-### Test WordPress  
-1. Truy cập: http://localhost:8012
-2. **Thấy trang WordPress?** ✅ Thành công!
+### Xdebug Ports:
+- **WordPress**: Port 9015
+- **Laravel API**: Port 9016
+- **E-commerce**: Port 9017
+
+### VS Code Configuration:
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "WordPress Debug",
+      "type": "php",
+      "request": "launch",
+      "port": 9015,
+      "pathMappings": {
+        "/app": "${workspaceFolder}/platforms/my-blog/projects"
+      }
+    }
+  ]
+}
+```
 
 ## 🛑 Nếu có lỗi
 

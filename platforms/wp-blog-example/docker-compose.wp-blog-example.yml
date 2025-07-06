@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  wp-blog-example:
+    build:
+      context: ../../docker/php74
+      dockerfile: Dockerfile
+    container_name: wp-blog-example_php74
+    restart: unless-stopped
+    ports:
+      - "8015:80"
+      - "9015:9003"
+    volumes:
+      - ../../projects/wp-blog-example:/var/www/html
+      - ../../logs/apache/wp-blog-example:/var/log/apache2
+      - ../../data/uploads/wp-blog-example:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=74
+      - PHP_MEMORY_LIMIT=96M
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql_low_ram
+      - DB_PORT=3306
+      - DB_DATABASE=wp_blog_example_db
+      - DB_USERNAME=mysql_user
+      - DB_PASSWORD=mysql_pass
+      - REDIS_HOST=redis_low_ram
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - docker_master_low_ram
+    external_links:
+      - postgres_low_ram:postgres_low_ram
+      - redis_low_ram:redis_low_ram
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  docker_master_low_ram:
+    external: true
