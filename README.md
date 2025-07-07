@@ -1,35 +1,85 @@
-# 🐳 Docker Master Platform - Auto Domain & Fast Restart
+# 🐳 Docker Master Platform - Complete Development Environment
 
-> **Hệ thống phát triển Docker với AI Auto-Detection + Auto Domain + Fast Restart**
+> **Hệ thống phát triển Docker tối ưu với AI Auto-Detection, Auto Domain và RAM Optimization**
 
-## 🌟 Tính năng Auto Features
+[![Docker](https://img.shields.io/badge/Docker-20.10+-blue.svg)](https://docker.com)
+[![PHP](https://img.shields.io/badge/PHP-7.4%20%7C%208.4-purple.svg)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-9%2B-red.svg)](https://laravel.com)
+[![WordPress](https://img.shields.io/badge/WordPress-6%2B-blue.svg)](https://wordpress.org)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-- **🤖 AI Auto-Detection**: Tự động chọn database, PHP version, platform type
-- **🌐 Auto Domain**: Tự động tạo domain [project].asmo-tranding.io với Nginx routing
-- **⚡ Fast Restart**: Apply changes trong 0.1 giây với smart restart system
-- **🗄️ Auto Database**: Tự động tạo database với permissions phù hợp
-- **🔧 Auto Nginx**: Tự động tạo và reload Nginx configuration
-- **🐛 Auto Debug**: Xdebug tự động cho PHP 7.4 & 8.4
-- **🚀 One Command**: Tạo platform hoàn chỉnh với 1 lệnh duy nhất
-- **📊 Memory Optimized**: Toàn bộ hệ thống dưới 1.5GB RAM
+## 🌟 Tính Năng Nổi Bật
 
-## ⚡ Quick Start - 1 phút
+### 🤖 AI-Powered Auto-Detection
+- **Smart Platform Detection**: Tự động nhận diện loại project từ tên
+- **Optimal Configuration**: Chọn database, PHP version, và cấu hình tối ưu
+- **Zero Configuration**: Không cần setup phức tạp, chỉ cần 1 lệnh
 
-### Khởi động toàn bộ hệ thống:
+### 🌐 Advanced Auto Domain System
+- **Dynamic Routing**: Tự động tạo domain [project].asmo-tranding.io
+- **Nginx Integration**: Cấu hình reverse proxy tự động
+- **SSL Ready**: Hỗ trợ SSL certificates cho development
+
+### ⚡ Performance & Optimization
+- **Fast Restart**: Áp dụng thay đổi trong 0.1 giây
+- **RAM Optimized**: Tối ưu cho hệ thống từ 4GB RAM
+- **Smart Caching**: Redis + OPcache + Database optimization
+- **Resource Monitoring**: Real-time RAM và performance tracking
+
+### 🗄️ Dual Database Support
+- **PostgreSQL**: Primary database cho modern applications
+- **MySQL**: Secondary database cho WordPress và legacy systems
+- **Auto Migration**: Tự động tạo database và permissions
+
+### 🐛 Developer Experience
+- **Xdebug Ready**: Cấu hình sẵn cho PHP 7.4 & 8.4
+- **VS Code Integration**: Launch configurations có sẵn
+- **Hot Reload**: Auto-restart khi có thay đổi code
+- **Comprehensive Logging**: Detailed logs cho debugging
+
+## ⚡ Quick Start - 2 Phút
+
+### Bước 1: Khởi Động Hệ Thống
 ```bash
-auto-start.bat
+# Clone repository (nếu chưa có)
+git clone [repository-url] docker_master
+cd docker_master
+
+# Auto-start toàn bộ services
+bin\auto-start.bat
+
+# Kiểm tra trạng thái
+docker ps
 ```
 
-### Tạo platform mới với auto features:
+### Bước 2: Tạo Platform Đầu Tiên
 ```bash
-create.bat my-blog           # → WordPress + MySQL + my-blog.asmo-tranding.io
-create.bat user-api          # → Laravel + PostgreSQL + user-api.asmo-tranding.io
-create.bat online-shop       # → E-commerce + MySQL + online-shop.asmo-tranding.io
+# AI tự động chọn cấu hình dựa trên tên
+bin\create.bat my-shop
+
+# Kết quả tự động:
+# ✅ Laravel 8.4 + MySQL (E-commerce detected)
+# ✅ Domain: my-shop.asmo-tranding.io
+# ✅ Port: 8010
+# ✅ Database: my_shop_db
+# ✅ Xdebug: Port 9084
 ```
 
-### Fast restart cho changes:
+### Bước 3: Truy Cập và Monitor
 ```bash
-fast-restart.bat             # → 0.1 giây apply changes
+# Dashboard chính
+http://localhost/
+
+# Platform vừa tạo
+http://my-shop.asmo-tranding.io  # Auto domain
+http://localhost:8010           # Direct access
+
+# RAM monitoring
+http://localhost/ram-optimization.php
+
+# Database management
+http://localhost:8080           # Adminer
+http://localhost:8081           # phpMyAdmin
 ```
 
 ## 🌐 Professional URLs
