@@ -37,15 +37,14 @@
 - **Hot Reload**: Auto-restart khi có thay đổi code
 - **Comprehensive Logging**: Detailed logs cho debugging
 
-## ⚡ Quick Start - 2 Phút
+## ⚡ Quick Start - 30 Giây
 
 ### Bước 1: Khởi Động Hệ Thống
 ```bash
-# Clone repository (nếu chưa có)
-git clone [repository-url] docker_master
-cd docker_master
+# Di chuyển vào thư mục docker_master
+cd D:\www\docker_master
 
-# Auto-start toàn bộ services
+# Auto-start toàn bộ services (đã được tối ưu)
 bin\auto-start.bat
 
 # Kiểm tra trạng thái
