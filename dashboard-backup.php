@@ -77,13 +77,9 @@ function getAvailableServices() {
             'Database Test' => '/test-db.php'
         ],
         'Platform URLs' => [
-            'Laravel PHP 8.4' => 'http://localhost:8010/laravel.php',
+            'Laravel PHP 8.4' => 'http://localhost:8010',
             'Laravel PHP 7.4' => 'http://localhost:8020',
             'WordPress PHP 7.4' => 'http://localhost:8030'
-        ],
-        'Alternative Access' => [
-            'Full Dashboard (Port 8010)' => 'http://localhost:8010/dashboard.php',
-            'Main Dashboard (Port 80)' => 'http://localhost'
         ]
     ];
 }

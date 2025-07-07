@@ -1,117 +1,172 @@
 # 🐳 Docker Master Platform - Hướng Dẫn Sử Dụng Hoàn Chỉnh
 
 ## 📋 Mục Lục
-1. [Giới thiệu](#giới-thiệu)
-2. [Cài đặt ban đầu](#cài-đặt-ban-đầu)
-3. [Tạo Platform tự động (Auto-Discovery)](#tạo-platform-tự-động)
+1. [Khởi động nhanh](#khởi-động-nhanh)
+2. [Dashboard và Monitoring](#dashboard-và-monitoring)
+3. [Tạo Platform tự động](#tạo-platform-tự-động)
 4. [Quản lý Platform](#quản-lý-platform)
-5. [Troubleshooting](#troubleshooting)
-6. [Ví dụ thực tế](#ví-dụ-thực-tế)
+5. [Database và Tools](#database-và-tools)
+6. [Troubleshooting](#troubleshooting)
+7. [Ví dụ thực tế](#ví-dụ-thực-tế)
 
 ---
 
-## 🎯 Giới thiệu
+## 🚀 Khởi động nhanh
 
-Docker Master Platform là hệ thống tạo website/ứng dụng **hoàn toàn tự động** chỉ với **1 lệnh duy nhất**.
-
-### ✨ Điều kỳ diệu
-```bash
-# Chỉ cần gõ lệnh này:
-create.bat my-shop
-
-# Hệ thống sẽ tự động:
-# ✅ Phát hiện đây là E-commerce
-# ✅ Tạo Laravel + PostgreSQL + Redis
-# ✅ Cấu hình database
-# ✅ Khởi động website
-# ✅ Mở browser: http://localhost:8015
-```
-
-### 🎁 Bạn nhận được gì?
-- **Website hoàn chỉnh** chạy ngay lập tức
-- **Database** đã được tạo và kết nối
-- **Cấu hình tối ưu** cho development
-- **Tài liệu** hướng dẫn riêng cho từng project
-
----
-
-## 🚀 Cài đặt ban đầu
-
-### Bước 1: Kiểm tra Docker
-```bash
-# Mở Command Prompt và gõ:
-docker --version
-```
-**Nếu báo lỗi:** Cài Docker Desktop từ https://docker.com
-
-### Bước 2: Khởi động Docker Master
+### ⚡ Khởi động hệ thống (1 lệnh)
 ```bash
 # Di chuyển vào thư mục docker_master
 cd D:\www\docker_master
 
-# Khởi động hệ thống cơ bản
-docker-compose -f docker-compose.low-ram.yml up -d
+# Khởi động toàn bộ hệ thống
+bin\auto-start.bat
 ```
 
-### Bước 3: Kiểm tra hệ thống
+**Hệ thống sẽ tự động:**
+- ✅ Khởi động tất cả services (MySQL, PostgreSQL, Redis, Nginx)
+- ✅ Cấu hình domain routing
+- ✅ Mở dashboard trong browser
+- ✅ Sẵn sàng tạo platforms
+
+### 🎯 Tạo Platform đầu tiên
 ```bash
-# Xem các service đang chạy
-docker ps
+# Tạo cửa hàng online
+bin\create.bat my-shop
+
+# Hệ thống AI sẽ tự động:
+# ✅ Phát hiện đây là E-commerce
+# ✅ Tạo Laravel PHP 8.4 + PostgreSQL + Redis
+# ✅ Cấu hình database và domain
+# ✅ Khởi động website: http://localhost:8010
 ```
 
-**Bạn sẽ thấy:**
-- `postgres_low_ram` - Database chính
-- `redis_low_ram` - Cache
-- `mailhog_low_ram` - Email testing
-- Và các service khác
-
-### Bước 4: Truy cập Dashboard
-- **Monitor**: http://localhost:8090
-- **Mailhog**: http://localhost:8025
+### 🎁 Bạn nhận được gì?
+- **🌐 Dashboard tổng quan**: http://localhost
+- **📊 RAM Monitor**: http://localhost/ram-optimization.php
+- **🧪 Database Test**: http://localhost/test-db.php
+- **📧 Email Testing**: http://localhost:8025 (Mailhog)
+- **🚀 Development Platforms**: Ports 8010, 8020, 8030...
 
 ---
 
-## 🤖 Tạo Platform tự động (Auto-Discovery)
+## 🎛️ Dashboard và Monitoring
+
+### 🏠 Dashboard Chính
+**URL**: http://localhost
+
+**Tính năng:**
+- 📊 Tổng quan hệ thống (containers, databases, platforms)
+- 🔗 Quick links đến tất cả services
+- 📈 Thống kê real-time
+- 🛠️ Tools quản lý nhanh
+
+### 📊 RAM Optimization Monitor
+**URL**: http://localhost/ram-optimization.php
+
+**Tính năng:**
+- 💾 Hiển thị RAM usage hiện tại
+- ⚡ Auto-detect RAM và đề xuất profile tối ưu
+- 🔧 Tối ưu containers theo RAM available
+- 📈 Lịch sử sử dụng memory
+
+### 🧪 Database Connection Tester
+**URL**: http://localhost/test-db.php
+
+**Tính năng:**
+- ✅ Test kết nối MySQL, PostgreSQL, Redis
+- 📋 Hiển thị thông tin connection
+- 🔍 Debug database issues
+- 📊 Performance metrics
+
+### 🌐 Platform URLs và Xdebug Testing
+
+#### 📍 Core Platform URLs
+- **🏠 Main Dashboard**: http://localhost (Nginx proxy)
+- **🔗 Direct PHP 8.4**: http://localhost:8010 (Laravel container)
+- **📧 Mailhog**: http://localhost:8025 (Email testing)
+
+#### 🐛 Xdebug Configuration
+**PHP 7.4 Container:**
+- **Port**: 9074 (Xdebug listener)
+- **Host**: localhost
+- **IDE Key**: VSCODE
+
+**PHP 8.4 Container:**
+- **Port**: 9084 (Xdebug listener)
+- **Host**: localhost
+- **IDE Key**: VSCODE
+
+#### 🧪 Xdebug Testing URLs
+Để kiểm tra Xdebug hoạt động, truy cập:
+- **PHP 8.4 + Xdebug**: http://localhost:8010/test-db.php?XDEBUG_SESSION_START=VSCODE
+- **Dashboard + Xdebug**: http://localhost/?XDEBUG_SESSION_START=VSCODE
+
+**Kiểm tra phpinfo():**
+- **PHP 8.4**: http://localhost:8010/phpinfo.php
+- **Dashboard**: http://localhost/phpinfo.php
+
+*Tìm section "Xdebug" để xác nhận cấu hình*
+
+### 📧 Email Testing (Mailhog)
+**URL**: http://localhost:8025
+
+**Tính năng:**
+- 📨 Catch tất cả emails từ applications
+- 👀 Preview emails trong browser
+- 🔍 Search và filter emails
+- 📱 Responsive interface
+
+### 🗄️ Database Management
+**PostgreSQL**: localhost:5432 (postgres_user/postgres_pass)
+**MySQL**: localhost:3306 (mysql_user/mysql_pass)
+**Redis**: localhost:6379
+
+---
+
+## 🤖 Tạo Platform tự động
 
 ### 🎯 Lệnh chính - CHỈ CẦN NHỚ CÁI NÀY!
 
 ```bash
-create.bat [tên-project-của-bạn]
+bin\create.bat [tên-project-của-bạn]
 ```
 
-### 📝 Quy tắc đặt tên (AI sẽ tự hiểu)
+### 🧠 AI Auto-Detection System
 
-#### 🛒 Muốn tạo E-commerce? Dùng từ khóa:
-- `shop`, `store`, `ecommerce`, `delivery`, `food`, `cafe`, `restaurant`
+Hệ thống AI sẽ tự động phân tích tên project và chọn:
+- **� PHP Version**: 7.4 hoặc 8.4
+- **🗄️ Database**: MySQL hoặc PostgreSQL
+- **⚡ Cache**: Redis (nếu cần)
+- **🌐 Port**: Tự động gán port available
+- **🐛 Debug**: Xdebug với port riêng
 
-**Ví dụ:**
+### 📝 Quy tắc đặt tên thông minh
+
+#### 🛒 E-commerce Platforms (Laravel PHP 8.4 + PostgreSQL + Redis)
 ```bash
-create.bat my-shop          # → Cửa hàng online
-create.bat food-delivery    # → App giao đồ ăn
-create.bat coffee-store     # → Cửa hàng cà phê
-create.bat book-shop        # → Cửa hàng sách
+bin\create.bat my-shop          # → Cửa hàng online
+bin\create.bat food-delivery    # → App giao đồ ăn
+bin\create.bat coffee-store     # → Cửa hàng cà phê
+bin\create.bat book-shop        # → Cửa hàng sách
 ```
+**Keywords**: `shop`, `store`, `ecommerce`, `delivery`, `food`, `cafe`, `restaurant`
 
-#### 📝 Muốn tạo Website/Blog? Dùng từ khóa:
-- `blog`, `news`, `cms`, `website`, `portfolio`
-
-**Ví dụ:**
+#### 📝 Content Platforms (WordPress PHP 7.4 + MySQL)
 ```bash
-create.bat my-blog          # → Blog cá nhân
-create.bat news-portal      # → Website tin tức
-create.bat company-website  # → Website công ty
-create.bat my-portfolio     # → Portfolio cá nhân
+bin\create.bat my-blog          # → Blog cá nhân
+bin\create.bat news-portal      # → Website tin tức
+bin\create.bat company-website  # → Website công ty
+bin\create.bat my-portfolio     # → Portfolio cá nhân
 ```
+**Keywords**: `blog`, `news`, `cms`, `website`, `portfolio`
 
-#### 🚀 Muốn tạo API? Dùng từ khóa:
-- `api`, `service`, `backend`
-
-**Ví dụ:**
+#### 🚀 API Services (Laravel PHP 8.4 + PostgreSQL + Redis)
 ```bash
-create.bat user-api         # → API quản lý user
-create.bat payment-service  # → Service thanh toán
-create.bat auth-backend     # → Backend xác thực
+bin\create.bat user-api         # → API quản lý user
+bin\create.bat payment-service  # → Service thanh toán
+bin\create.bat auth-backend     # → Backend xác thực
 ```
+**Keywords**: `api`, `service`, `backend`
 
 ### 🔄 Quá trình tự động diễn ra
 
@@ -119,10 +174,12 @@ Khi bạn chạy lệnh, hệ thống sẽ:
 
 1. **🤖 AI phân tích tên** → Chọn loại platform phù hợp
 2. **📁 Tạo thư mục** → Cấu trúc project hoàn chỉnh
-3. **🗄️ Tạo database** → PostgreSQL với tên phù hợp
-4. **⚙️ Tạo cấu hình** → Docker, PHP, Apache
-5. **🚀 Khởi động** → Build và start container
-6. **🌐 Mở browser** → Hiển thị website của bạn
+3. **🗄️ Tạo database** → MySQL/PostgreSQL với tên phù hợp
+4. **⚙️ Tạo cấu hình** → Docker, Nginx, PHP
+5. **� Cấu hình Xdebug** → Debug port riêng cho từng platform
+6. **�🚀 Khởi động** → Build và start containers
+7. **🌐 Auto-routing** → Nginx tự động route domain
+8. **📱 Mở browser** → Hiển thị website của bạn
 
 ### 📊 Kết quả nhận được
 
@@ -132,15 +189,38 @@ Sau khi chạy lệnh, bạn sẽ có:
 📁 Cấu trúc project:
 platforms/my-shop/
 ├── docker-compose.my-shop.yml  # Cấu hình riêng
+├── nginx.conf                  # Nginx routing
 ├── README.md                   # Hướng dẫn riêng
 
 projects/my-shop/
 ├── index.php                   # Code ứng dụng
+├── config/                     # Database config
 
 🗄️ Database: my_shop_db (tự động tạo)
-🌐 URL: http://localhost:8015 (tự động mở)
-🐛 Debug: localhost:9015 (Xdebug)
+🌐 URL: http://localhost:8010 (tự động mở)
+🐛 Debug: localhost:9010 (Xdebug)
+🔗 Domain: my-shop.local (optional)
 ```
+
+### 🎯 Platform Templates Available
+
+#### 🛒 E-commerce Template
+- **Framework**: Laravel 8.4 với Blade templates
+- **Database**: PostgreSQL với sample products table
+- **Features**: Cart, checkout, user auth, admin panel
+- **Cache**: Redis cho sessions và cache
+
+#### 📝 WordPress Template
+- **CMS**: WordPress latest với custom theme
+- **Database**: MySQL với sample content
+- **Features**: Posts, pages, comments, media library
+- **Plugins**: Essential plugins pre-installed
+
+#### 🚀 API Template
+- **Framework**: Laravel 8.4 API-only
+- **Database**: PostgreSQL với API tables
+- **Features**: JWT auth, rate limiting, API docs
+- **Cache**: Redis cho API caching
 
 ---
 
@@ -207,13 +287,29 @@ docker-compose -f docker-compose.low-ram.yml restart
 
 ## 🔧 Troubleshooting
 
-### ❌ Lỗi "Docker not found"
-**Nguyên nhân:** Docker chưa cài hoặc chưa khởi động
+### ❌ Nginx khởi động liên tục (FIXED)
+**Nguyên nhân:** Duplicate default server configuration
+
+**✅ Đã khắc phục:** Removed duplicate server block trong nginx.conf
+```bash
+# Kiểm tra Nginx status
+docker ps --filter name=nginx_proxy_low_ram
+
+# Nếu vẫn lỗi, restart:
+docker restart nginx_proxy_low_ram
+```
+
+### ❌ Website trả về 404
+**Nguyên nhân:** Files không đúng document root
 
 **Giải pháp:**
-1. Cài Docker Desktop
-2. Khởi động Docker Desktop
-3. Đợi icon Docker màu xanh
+```bash
+# Kiểm tra document root
+docker exec laravel_php84_low_ram ls -la /app/
+
+# Copy files vào đúng thư mục
+docker cp www/index.php laravel_php84_low_ram:/app/
+```
 
 ### ❌ Lỗi "Port already in use"
 **Nguyên nhân:** Port đã được sử dụng
@@ -221,48 +317,64 @@ docker-compose -f docker-compose.low-ram.yml restart
 **Giải pháp:**
 ```bash
 # Xem port nào đang dùng
-netstat -an | findstr :8015
+netstat -an | findstr :8010
 
 # Dừng service đang dùng port đó
 docker stop [container-name]
 ```
 
-### ❌ Website không mở được
-**Nguyên nhân:** Container chưa start xong
-
-**Giải pháp:**
-```bash
-# Kiểm tra trạng thái
-docker ps
-
-# Xem logs để biết lỗi
-docker logs [container-name]
-
-# Đợi thêm 1-2 phút rồi thử lại
-```
-
 ### ❌ Database connection failed
-**Nguyên nhân:** Database chưa được tạo hoặc tên sai
+**Nguyên nhân:** Database chưa được tạo hoặc connection string sai
 
 **Giải pháp:**
 ```bash
-# Chạy script sửa database
-scripts\fix-platform-databases.bat
+# Test database connections
+curl http://localhost/test-db.php
 
-# Hoặc tạo database thủ công
+# Tạo database thủ công nếu cần
 docker exec postgres_low_ram psql -U postgres_user -d postgres -c "CREATE DATABASE my_shop_db;"
 ```
 
-### 🆘 Script khắc phục tự động
+### ❌ Container không start
+**Nguyên nhân:** Resource conflicts hoặc configuration errors
+
+**Giải pháp:**
 ```bash
-# Sửa tất cả vấn đề database
-scripts\fix-platform-databases.bat
+# Xem logs chi tiết
+docker logs [container-name] --tail 50
 
-# Tối ưu hệ thống
+# Restart toàn bộ hệ thống
+docker-compose -f docker-compose.low-ram.yml restart
+
+# Nếu vẫn lỗi, rebuild
+docker-compose -f docker-compose.low-ram.yml up -d --build
+```
+
+### 🆘 Scripts khắc phục tự động
+```bash
+# Khởi động lại toàn bộ hệ thống
+bin\auto-start.bat
+
+# Kiểm tra và sửa tất cả vấn đề
+bin\health-check.bat
+
+# Tối ưu RAM và performance
 scripts\one-click-optimize.bat
+```
 
-# Hiển thị trạng thái tổng quan
-scripts\final-test-all.bat
+### 📊 Monitoring và Diagnostics
+```bash
+# Xem resource usage
+docker stats
+
+# Xem disk usage
+docker system df
+
+# Xem network
+docker network ls
+
+# Health check tổng quan
+curl http://localhost/ram-optimization.php
 ```
 
 ---
@@ -319,31 +431,43 @@ create.bat mobile-api
 
 ## 🎉 Tóm tắt - Nhớ những điều này!
 
-### 🚀 Lệnh chính (quan trọng nhất)
+### 🚀 Lệnh khởi động hệ thống
 ```bash
-create.bat [tên-project]
+bin\auto-start.bat           # Khởi động toàn bộ hệ thống
 ```
 
-### 🎯 Quy tắc đặt tên
-- **E-commerce:** dùng từ `shop`, `store`, `food`, `delivery`
-- **Website/Blog:** dùng từ `blog`, `news`, `website`, `portfolio`  
-- **API:** dùng từ `api`, `service`, `backend`
+### 🎯 Lệnh tạo platform (quan trọng nhất)
+```bash
+bin\create.bat [tên-project]
+```
 
-### 🌐 URLs mặc định
-- Platform đầu tiên: http://localhost:8015
-- Platform thứ hai: http://localhost:8016
-- Platform thứ ba: http://localhost:8017
+### 🌐 URLs chính
+- **Dashboard**: http://localhost
+- **RAM Monitor**: http://localhost/ram-optimization.php
+- **DB Tester**: http://localhost/test-db.php
+- **Mailhog**: http://localhost:8025
+
+### 🚀 Development Platforms
+- **Laravel PHP 8.4**: http://localhost:8010
+- **Laravel PHP 7.4**: http://localhost:8020
+- **WordPress PHP 7.4**: http://localhost:8030
+
+### 🎯 Quy tắc đặt tên AI
+- **E-commerce:** `shop`, `store`, `food`, `delivery` → Laravel 8.4 + PostgreSQL
+- **Website/Blog:** `blog`, `news`, `website`, `portfolio` → WordPress + MySQL
+- **API:** `api`, `service`, `backend` → Laravel 8.4 + PostgreSQL + Redis
 
 ### 🛠️ Lệnh quản lý cơ bản
 ```bash
-docker ps                    # Xem platforms đang chạy
+docker ps                    # Xem containers đang chạy
 docker logs [container]      # Xem logs
-docker restart [container]   # Restart platform
+docker restart [container]   # Restart container
 ```
 
 ### 🆘 Khi gặp lỗi
 ```bash
-scripts\fix-platform-databases.bat    # Sửa database
+bin\auto-start.bat                    # Restart toàn bộ hệ thống
+bin\health-check.bat                  # Kiểm tra health
 scripts\one-click-optimize.bat        # Tối ưu hệ thống
 ```
 
