@@ -103,17 +103,17 @@ echo "<h3>For External Tools (Navicat, etc.):</h3>";
 echo "<strong>MySQL:</strong><br>";
 echo "Host: localhost<br>";
 echo "Port: 3306<br>";
-echo "Username: dev_user<br>";
-echo "Password: dev_pass<br>";
-echo "Database: dev_db<br>";
+echo "Username: mysql_user<br>";
+echo "Password: mysql_pass<br>";
+echo "Database: main_db<br>";
 echo "SSL: Disabled<br><br>";
 
 echo "<strong>PostgreSQL:</strong><br>";
 echo "Host: localhost<br>";
 echo "Port: 5432<br>";
-echo "Username: dev_user<br>";
-echo "Password: dev_pass<br>";
-echo "Database: dev_db<br>";
+echo "Username: postgres_user<br>";
+echo "Password: postgres_pass<br>";
+echo "Database: postgres<br>";
 echo "SSL Mode: Disable<br><br>";
 
 echo "<strong>Redis:</strong><br>";
