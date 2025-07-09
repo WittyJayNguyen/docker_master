@@ -1,13 +1,16 @@
 # 🐳 Docker Master Platform - Hướng Dẫn Sử Dụng Hoàn Chỉnh
 
+> **Phiên bản mới nhất**: 2025.01 - Cập nhật đầy đủ với Multi-PHP, Xdebug, Auto-Platform Creation
+
 ## 📋 Mục Lục
 1. [Khởi động nhanh](#khởi-động-nhanh)
 2. [Dashboard và Monitoring](#dashboard-và-monitoring)
-3. [Tạo Platform tự động](#tạo-platform-tự-động)
-4. [Quản lý Platform](#quản-lý-platform)
-5. [Database và Tools](#database-và-tools)
-6. [Troubleshooting](#troubleshooting)
-7. [Ví dụ thực tế](#ví-dụ-thực-tế)
+3. [Platform URLs và Xdebug](#platform-urls-và-xdebug)
+4. [Tạo Platform tự động](#tạo-platform-tự-động)
+5. [Quản lý Platform](#quản-lý-platform)
+6. [Database và Tools](#database-và-tools)
+7. [Troubleshooting](#troubleshooting)
+8. [Ví dụ thực tế](#ví-dụ-thực-tế)
 
 ---
 
@@ -19,12 +22,16 @@
 cd D:\www\docker_master
 
 # Khởi động toàn bộ hệ thống
+docker-compose -f docker-compose.low-ram.yml up -d
+
+# Hoặc dùng script tự động
 bin\auto-start.bat
 ```
 
 **Hệ thống sẽ tự động:**
 - ✅ Khởi động tất cả services (MySQL, PostgreSQL, Redis, Nginx)
-- ✅ Cấu hình domain routing
+- ✅ Multi-PHP environments (7.4 & 8.4) với Xdebug
+- ✅ Cấu hình database connections
 - ✅ Mở dashboard trong browser
 - ✅ Sẵn sàng tạo platforms
 
@@ -41,11 +48,15 @@ bin\create.bat my-shop
 ```
 
 ### 🎁 Bạn nhận được gì?
-- **🌐 Dashboard tổng quan**: http://localhost
-- **📊 RAM Monitor**: http://localhost/ram-optimization.php
-- **🧪 Database Test**: http://localhost/test-db.php
+- **🌐 Main Dashboard**: http://localhost:8010 (Laravel PHP 8.4)
+- **🔗 Platform URLs**:
+  - Laravel PHP 8.4: http://localhost:8010/laravel.php
+  - Laravel PHP 7.4: http://localhost:8020
+  - WordPress PHP 7.4: http://localhost:8030
+- **🧪 Database Test**: http://localhost:8010/test-db.php
+- **📋 PHP Info**: http://localhost:8010/phpinfo.php
 - **📧 Email Testing**: http://localhost:8025 (Mailhog)
-- **🚀 Development Platforms**: Ports 8010, 8020, 8030...
+- **🐛 Xdebug Ready**: Ports 9074, 9084, 9075
 
 ---
 
@@ -85,27 +96,37 @@ bin\create.bat my-shop
 - **🔗 Direct PHP 8.4**: http://localhost:8010 (Laravel container)
 - **📧 Mailhog**: http://localhost:8025 (Email testing)
 
-#### 🐛 Xdebug Configuration
-**PHP 7.4 Container:**
+#### 🐛 Xdebug Configuration (Cập nhật 2025)
+**Laravel PHP 7.4 Container:**
 - **Port**: 9074 (Xdebug listener)
 - **Host**: localhost
 - **IDE Key**: VSCODE
+- **URL**: http://localhost:8020
 
-**PHP 8.4 Container:**
+**Laravel PHP 8.4 Container:**
 - **Port**: 9084 (Xdebug listener)
 - **Host**: localhost
 - **IDE Key**: VSCODE
+- **URL**: http://localhost:8010
+
+**WordPress PHP 7.4 Container:**
+- **Port**: 9075 (Xdebug listener)
+- **Host**: localhost
+- **IDE Key**: VSCODE
+- **URL**: http://localhost:8030
 
 #### 🧪 Xdebug Testing URLs
 Để kiểm tra Xdebug hoạt động, truy cập:
-- **PHP 8.4 + Xdebug**: http://localhost:8010/test-db.php?XDEBUG_SESSION_START=VSCODE
-- **Dashboard + Xdebug**: http://localhost/?XDEBUG_SESSION_START=VSCODE
+- **Laravel PHP 8.4**: http://localhost:8010/phpinfo.php?XDEBUG_SESSION_START=VSCODE
+- **Laravel PHP 7.4**: http://localhost:8020/phpinfo.php?XDEBUG_SESSION_START=VSCODE
+- **WordPress PHP 7.4**: http://localhost:8030/phpinfo.php?XDEBUG_SESSION_START=VSCODE
 
-**Kiểm tra phpinfo():**
-- **PHP 8.4**: http://localhost:8010/phpinfo.php
-- **Dashboard**: http://localhost/phpinfo.php
+**Kiểm tra phpinfo() và Xdebug status:**
+- **Laravel 8.4**: http://localhost:8010/phpinfo.php
+- **Laravel 7.4**: http://localhost:8020/phpinfo.php
+- **WordPress**: http://localhost:8030/phpinfo.php
 
-*Tìm section "Xdebug" để xác nhận cấu hình*
+*Tìm section "Xdebug" để xác nhận cấu hình và debug session status*
 
 ### 📧 Email Testing (Mailhog)
 **URL**: http://localhost:8025
@@ -285,6 +306,94 @@ docker-compose -f docker-compose.low-ram.yml restart
 
 ---
 
+## 🗄️ Database và Tools
+
+### 📊 Database Credentials (Cập nhật 2025)
+
+#### 🐬 MySQL Database
+```bash
+Host: localhost
+Port: 3306
+Username: mysql_user
+Password: mysql_pass
+Database: main_db
+SSL: Disabled
+```
+
+**Connection String:**
+```php
+$mysql = new PDO("mysql:host=mysql_low_ram;port=3306;dbname=main_db", "mysql_user", "mysql_pass");
+```
+
+#### 🐘 PostgreSQL Database
+```bash
+Host: localhost
+Port: 5432
+Username: postgres_user
+Password: postgres_pass
+Database: postgres
+SSL Mode: Disable
+```
+
+**Connection String:**
+```php
+$pgsql = new PDO("pgsql:host=postgres_low_ram;port=5432;dbname=postgres", "postgres_user", "postgres_pass");
+```
+
+#### 🔴 Redis Cache
+```bash
+Host: localhost
+Port: 6379
+Password: (none)
+```
+
+**Connection:**
+```php
+$redis = new Redis();
+$redis->connect('redis_low_ram', 6379);
+```
+
+### 🛠️ Database Management Tools
+
+#### 📋 Web-based Testing
+- **Database Test**: http://localhost:8010/test-db.php
+- **PHP Info**: http://localhost:8010/phpinfo.php
+- **Mailhog**: http://localhost:8025
+
+#### 💻 Command Line Access
+```bash
+# MySQL CLI
+docker exec mysql_low_ram mysql -u mysql_user -pmysql_pass
+
+# PostgreSQL CLI
+docker exec postgres_low_ram psql -U postgres_user -d postgres
+
+# Redis CLI
+docker exec redis_low_ram redis-cli
+```
+
+#### 🔍 Database Operations
+```bash
+# List MySQL databases
+docker exec mysql_low_ram mysql -u mysql_user -pmysql_pass -e "SHOW DATABASES;"
+
+# List PostgreSQL databases
+docker exec postgres_low_ram psql -U postgres_user -d postgres -c "\l"
+
+# Create new database
+docker exec postgres_low_ram psql -U postgres_user -d postgres -c "CREATE DATABASE my_new_db;"
+```
+
+### 🔗 External Tool Connections
+
+#### Navicat / DBeaver / phpMyAdmin
+Sử dụng thông tin connection ở trên với:
+- **Host**: localhost (không phải container name)
+- **Ports**: 3306 (MySQL), 5432 (PostgreSQL)
+- **Credentials**: Như đã liệt kê ở trên
+
+---
+
 ## 🔧 Troubleshooting
 
 ### ❌ Nginx khởi động liên tục (FIXED)
@@ -323,13 +432,17 @@ netstat -an | findstr :8010
 docker stop [container-name]
 ```
 
-### ❌ Database connection failed
-**Nguyên nhân:** Database chưa được tạo hoặc connection string sai
+### ❌ Database connection failed (FIXED 2025)
+**Nguyên nhân:** Credentials cũ hoặc connection string sai
 
-**Giải pháp:**
+**✅ Đã khắc phục:** Cập nhật credentials đúng
 ```bash
-# Test database connections
-curl http://localhost/test-db.php
+# Test database connections (URL mới)
+curl http://localhost:8010/test-db.php
+
+# Credentials đúng:
+# MySQL: mysql_user/mysql_pass
+# PostgreSQL: postgres_user/postgres_pass
 
 # Tạo database thủ công nếu cần
 docker exec postgres_low_ram psql -U postgres_user -d postgres -c "CREATE DATABASE my_shop_db;"
@@ -758,28 +871,51 @@ docker system df
 
 ---
 
-## 🎓 Kết luận - Bạn đã học được gì?
+## 🎓 Kết luận - Docker Master Platform 2025
 
-### ✅ Kỹ năng đã có:
-1. **Tạo platform tự động** với 1 lệnh
-2. **Quản lý nhiều project** cùng lúc
-3. **Làm việc với database** PostgreSQL
-4. **Debug và development** với Xdebug
-5. **Xử lý lỗi** cơ bản
-6. **Tối ưu hệ thống** định kỳ
+### ✅ Tính năng hoàn chỉnh:
+1. **Multi-PHP Environment** - PHP 7.4 & 8.4 với Xdebug
+2. **Dual Database Support** - MySQL & PostgreSQL
+3. **Auto Platform Creation** - AI-powered project detection
+4. **Real-time Monitoring** - Dashboard với database status
+5. **Development Tools** - phpinfo, database test, email testing
+6. **Clean Architecture** - Optimized containers và RAM usage
 
-### 🚀 Bước tiếp theo:
-1. **Thực hành** tạo nhiều platform khác nhau
-2. **Customize code** theo nhu cầu dự án
-3. **Deploy production** khi sẵn sàng
-4. **Chia sẻ kiến thức** với team
+### 🌐 URLs quan trọng (Cập nhật 2025):
+- **Main Dashboard**: http://localhost:8010
+- **Laravel PHP 8.4**: http://localhost:8010/laravel.php
+- **Laravel PHP 7.4**: http://localhost:8020
+- **WordPress PHP 7.4**: http://localhost:8030
+- **Database Test**: http://localhost:8010/test-db.php
+- **PHP Info**: http://localhost:8010/phpinfo.php
+- **Mailhog**: http://localhost:8025
 
-### 💡 Nhớ những điều quan trọng:
-- **Lệnh chính**: `create.bat [tên-project]`
-- **Quy tắc đặt tên**: Dùng từ khóa mô tả dự án
-- **URLs**: Bắt đầu từ localhost:8015
-- **Khi gặp lỗi**: Chạy scripts trong thư mục `scripts/`
+### 🐛 Xdebug Ports:
+- **Laravel PHP 7.4**: 9074
+- **Laravel PHP 8.4**: 9084
+- **WordPress PHP 7.4**: 9075
 
-**🌟 Chúc bạn thành công với Docker Master Platform!**
+### 🗄️ Database Credentials:
+- **MySQL**: mysql_user/mysql_pass (localhost:3306)
+- **PostgreSQL**: postgres_user/postgres_pass (localhost:5432)
+- **Redis**: No password (localhost:6379)
 
-*Từ giờ, việc tạo website/app chỉ mất 30 giây thay vì 30 phút!*
+### 🚀 Quick Commands:
+```bash
+# Khởi động hệ thống
+docker-compose -f docker-compose.low-ram.yml up -d
+
+# Tạo platform mới
+bin\create.bat my-project
+
+# Test databases
+curl http://localhost:8010/test-db.php
+
+# Restart clean
+docker-compose -f docker-compose.low-ram.yml down
+docker-compose -f docker-compose.low-ram.yml up -d
+```
+
+**🌟 Docker Master Platform 2025 - Hoàn hảo cho Modern Development!**
+
+*Multi-PHP, Dual-Database, Auto-Creation, Xdebug Ready!*

@@ -1,11 +1,12 @@
-# 🐳 Docker Master Platform - Complete Development Environment
+# 🐳 Docker Master Platform 2025 - Complete Development Environment
 
-> **Hệ thống phát triển Docker tối ưu với AI Auto-Detection, Auto Domain và RAM Optimization**
+> **Hệ thống phát triển Docker tối ưu với Multi-PHP, Dual-Database, AI Auto-Detection và Xdebug Ready**
 
 [![Docker](https://img.shields.io/badge/Docker-20.10+-blue.svg)](https://docker.com)
 [![PHP](https://img.shields.io/badge/PHP-7.4%20%7C%208.4-purple.svg)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-9%2B-red.svg)](https://laravel.com)
 [![WordPress](https://img.shields.io/badge/WordPress-6%2B-blue.svg)](https://wordpress.org)
+[![Xdebug](https://img.shields.io/badge/Xdebug-3.3+-orange.svg)](https://xdebug.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## 🌟 Tính Năng Nổi Bật
@@ -26,25 +27,30 @@
 - **Smart Caching**: Redis + OPcache + Database optimization
 - **Resource Monitoring**: Real-time RAM và performance tracking
 
-### 🗄️ Dual Database Support
-- **PostgreSQL**: Primary database cho modern applications
-- **MySQL**: Secondary database cho WordPress và legacy systems
+### 🗄️ Dual Database Support (Updated 2025)
+- **PostgreSQL 15**: Primary database với credentials: postgres_user/postgres_pass
+- **MySQL 8.0**: Secondary database với credentials: mysql_user/mysql_pass
+- **Redis 7**: Caching layer không cần password
 - **Auto Migration**: Tự động tạo database và permissions
 
-### 🐛 Developer Experience
-- **Xdebug Ready**: Cấu hình sẵn cho PHP 7.4 & 8.4
-- **VS Code Integration**: Launch configurations có sẵn
+### 🐛 Developer Experience (Enhanced 2025)
+- **Multi-PHP Xdebug**: PHP 7.4 (port 9074), PHP 8.4 (port 9084), WordPress (port 9075)
+- **VS Code Ready**: Launch configurations có sẵn với IDE Key VSCODE
+- **Real-time Testing**: phpinfo.php và test-db.php trên mỗi platform
 - **Hot Reload**: Auto-restart khi có thay đổi code
-- **Comprehensive Logging**: Detailed logs cho debugging
+- **Comprehensive Dashboard**: Real-time database status và monitoring
 
 ## ⚡ Quick Start - 30 Giây
 
-### Bước 1: Khởi Động Hệ Thống
+### Bước 1: Khởi Động Hệ Thống (Updated 2025)
 ```bash
 # Di chuyển vào thư mục docker_master
 cd D:\www\docker_master
 
-# Auto-start toàn bộ services (đã được tối ưu)
+# Khởi động với file cấu hình mới
+docker-compose -f docker-compose.low-ram.yml up -d
+
+# Hoặc dùng auto-start script
 bin\auto-start.bat
 
 # Kiểm tra trạng thái
@@ -64,21 +70,25 @@ bin\create.bat my-shop
 # ✅ Xdebug: Port 9084
 ```
 
-### Bước 3: Truy Cập và Monitor
+### Bước 3: Truy Cập và Monitor (URLs 2025)
 ```bash
-# Dashboard chính
-http://localhost/
+# Main Dashboard
+http://localhost:8010
 
-# Platform vừa tạo
-http://my-shop.asmo-tranding.io  # Auto domain
-http://localhost:8010           # Direct access
+# Platform URLs
+http://localhost:8010/laravel.php  # Laravel PHP 8.4 Welcome
+http://localhost:8020              # Laravel PHP 7.4 Platform
+http://localhost:8030              # WordPress PHP 7.4 Platform
 
-# RAM monitoring
-http://localhost/ram-optimization.php
+# Development Tools
+http://localhost:8010/test-db.php  # Database Connection Test
+http://localhost:8010/phpinfo.php # PHP Info với Xdebug Status
+http://localhost:8025              # Mailhog Email Testing
 
-# Database management
-http://localhost:8080           # Adminer
-http://localhost:8081           # phpMyAdmin
+# Xdebug Testing
+http://localhost:8010/phpinfo.php?XDEBUG_SESSION_START=VSCODE
+http://localhost:8020/phpinfo.php?XDEBUG_SESSION_START=VSCODE
+http://localhost:8030/phpinfo.php?XDEBUG_SESSION_START=VSCODE
 ```
 
 ## 🌐 Professional URLs

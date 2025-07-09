@@ -8,8 +8,8 @@ services:
     container_name: my-shop_php84
     restart: unless-stopped
     ports:
-      - "8015:80"   # Web port for direct access
-      - "9015:9003"   # Xdebug port
+      - "8016:80"   # Web port for direct access
+      - "9016:9003"   # Xdebug port
     expose:
       - "80"  # Internal port for Nginx proxy
     volumes:

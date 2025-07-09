@@ -1,13 +1,20 @@
-# 📚 Tài liệu Docker Master Platform
+# 📚 Docker Master Platform 2025 - Documentation
+
+> **Phiên bản 2025 - Multi-PHP, Dual-Database, Xdebug Ready**
 
 ## 🎯 Hướng dẫn theo cấp độ
 
 ### 👶 Người mới bắt đầu
-1. **[Bắt đầu nhanh - 5 phút](01-QUICK-START.md)** ⚡
+1. **[Quick Reference 2025](QUICK-REFERENCE-2025.md)** 🚀
+   - Tất cả URLs, credentials, commands mới nhất
+   - Multi-PHP, Dual-Database, Xdebug ready
+   - Copy-paste commands
+
+2. **[Bắt đầu nhanh - 5 phút](01-QUICK-START.md)** ⚡
    - Chỉ 3 bước đơn giản để chạy dự án
    - Không cần hiểu sâu, chỉ cần chạy được
 
-2. **[Hướng dẫn từng bước](02-STEP-BY-STEP.md)** 📖
+3. **[Hướng dẫn từng bước](02-STEP-BY-STEP.md)** 📖
    - Chi tiết từ A-Z
    - Giải thích từng bước làm gì
    - Troubleshooting cơ bản
