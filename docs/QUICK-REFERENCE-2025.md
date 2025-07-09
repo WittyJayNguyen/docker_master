@@ -143,6 +143,19 @@ curl http://localhost:8010/test-db.php
 # PostgreSQL: postgres_user/postgres_pass
 ```
 
+### ❌ Navicat Cannot Create Tables
+```bash
+# Quick fix for Navicat permissions
+bin\fix-navicat.bat
+
+# Manual fix
+docker exec mysql_low_ram mysql -u root -pmysql_root_pass -e "GRANT ALL PRIVILEGES ON *.* TO 'mysql_user'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+
+# Navicat Settings:
+# MySQL: localhost:3306, mysql_user/mysql_pass
+# PostgreSQL: localhost:5432, postgres_user/postgres_pass
+```
+
 ### ❌ Container Not Starting
 ```bash
 # Check logs
