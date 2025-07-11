@@ -1,0 +1,44 @@
+# Docker Master Platform - Default Configuration
+# This file contains default settings for all platforms
+
+version: '3.8'
+
+# Default service configurations
+x-default-php: &default-php
+  restart: unless-stopped
+  environment:
+    - PHP_MEMORY_LIMIT=96M
+    - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+    - PHP_MAX_EXECUTION_TIME=300
+    - PHP_UPLOAD_MAX_FILESIZE=64M
+    - PHP_POST_MAX_SIZE=64M
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 64M
+
+x-default-database: &default-database
+  restart: unless-stopped
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 128M
+
+# Default network configuration
+networks:
+  default:
+    driver: bridge
+    name: docker_master_network
+
+# Default volume configuration  
+volumes:
+  postgres_data:
+    driver: local
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local

@@ -32,7 +32,7 @@ echo   • Auto database creation with permissions
 echo   • Auto container startup and testing
 
 echo.
-call scripts\auto-platform.bat %1
+call app\scripts\platform\auto-platform.bat %1
 
 echo.
 echo 🎉 PLATFORM CREATED WITH AUTO FEATURES!

@@ -38,14 +38,14 @@ echo.
 
 REM Stop any existing containers
 echo 🛑 Stopping existing containers...
-docker-compose down >nul 2>&1
-docker-compose -f docker-compose.monitoring.yml down >nul 2>&1
+call bin\docker-compose.bat down >nul 2>&1
+docker-compose -f src\config\environments\docker-compose.monitoring.yml down >nul 2>&1
 echo ✅ Cleaned up existing containers
 echo.
 
 REM Start main services with RAM optimization
 echo 🚀 Starting main services with RAM optimization...
-docker-compose -f docker-compose.yml -f config/docker-compose.override.yml up -d
+call bin\docker-compose.bat up -d
 if errorlevel 1 (
     echo ❌ Failed to start main services
     pause
@@ -68,14 +68,14 @@ echo.
 
 REM Start auto-monitoring
 echo 🤖 Starting auto-monitoring...
-docker-compose -f config/docker-compose.monitoring.yml up -d >nul 2>&1
+docker-compose -f app\config\environments\docker-compose.monitoring.yml up -d >nul 2>&1
 echo ✅ Auto-monitoring started
 echo.
 
 REM Show final status
 echo 📊 Final system status:
 echo ================================================================
-docker-compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
+call bin\docker-compose.bat ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
 echo.
 
 echo 🌐 Available Services:
@@ -107,10 +107,10 @@ echo.
 echo 🎉 Docker Master Platform is ready!
 echo ================================================================
 echo 💡 Quick commands:
-echo    • Stop all:          docker-compose down
-echo    • View logs:         docker-compose logs
-echo    • Restart service:   docker-compose restart [service_name]
-echo    • Monitor RAM:       scripts\monitor-ram.bat
+echo    • Stop all:          bin\docker-compose.bat down
+echo    • View logs:         bin\docker-compose.bat logs
+echo    • Restart service:   bin\docker-compose.bat restart [service_name]
+echo    • Monitor RAM:       app\scripts\monitoring\monitor-ram.bat
 echo.
 echo 🌐 Opening main dashboard...
 start http://localhost:8090

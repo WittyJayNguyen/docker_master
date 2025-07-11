@@ -1,0 +1,48 @@
+# Platform Template - Docker Compose Configuration
+# Use this template to create new platforms
+
+version: '3.8'
+
+services:
+  {{PLATFORM_NAME}}:
+    build:
+      context: ../../infrastructure/docker/php{{PHP_VERSION}}
+      dockerfile: Dockerfile
+    container_name: {{PLATFORM_NAME}}_php{{PHP_VERSION}}
+    restart: unless-stopped
+    ports:
+      - "{{PLATFORM_PORT}}:80"
+      - "{{XDEBUG_PORT}}:9003"  # Xdebug port
+    volumes:
+      - ../../runtime/projects/{{PLATFORM_NAME}}:/var/www/html
+      - ../../runtime/logs/apache/{{PLATFORM_NAME}}:/var/log/apache2
+      - ../../runtime/data/uploads/{{PLATFORM_NAME}}:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION={{PHP_VERSION}}
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - DB_HOST={{DB_HOST}}
+      - DB_PORT={{DB_PORT}}
+      - DB_DATABASE={{PLATFORM_NAME}}_db
+      - DB_USERNAME={{DB_USERNAME}}
+      - DB_PASSWORD={{DB_PASSWORD}}
+      - REDIS_HOST=redis_low_ram
+      - REDIS_PORT=6379
+      - PLATFORM_NAME={{PLATFORM_NAME}}
+      - PLATFORM_TYPE={{PLATFORM_TYPE}}
+    depends_on:
+      - {{DB_SERVICE}}
+      - redis
+    networks:
+      - docker_master_network
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+networks:
+  docker_master_network:
+    external: true

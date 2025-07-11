@@ -151,17 +151,17 @@ echo ================================================================
 
 echo 📝 Domain Pattern:
 echo ----------------------------------------------------------------
-echo   [platform-name].asmo-tranding.io
-echo   
+echo   [platform-name].io
+echo
 echo   Examples:
-echo   • my-blog.asmo-tranding.io
-echo   • user-api.asmo-tranding.io
-echo   • online-shop.asmo-tranding.io
+echo   • my-blog.io
+echo   • user-api.io
+echo   • online-shop.io
 
 echo.
 echo 📝 Auto Configuration:
 echo ----------------------------------------------------------------
-echo   • Hosts file: 127.0.0.1 [platform].asmo-tranding.io
+echo   • Hosts file: 127.0.0.1 [platform].io
 echo   • Nginx config: Auto-generated proxy rules
 echo   • SSL ready: HTTPS support prepared
 echo   • Load balancing ready: Multiple containers support

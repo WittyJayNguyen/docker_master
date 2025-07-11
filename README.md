@@ -1,6 +1,8 @@
-# 🐳 Docker Master Platform 2025 - Complete Development Environment
+# 🐳 Docker Master Platform 2025 - Professional Edition
 
 > **Hệ thống phát triển Docker tối ưu với Multi-PHP, Dual-Database, AI Auto-Detection và Xdebug Ready**
+> **🏗️ Professional Architecture & Clean Code Structure**
+> **🌍 Cross-Platform: Windows, Linux, macOS**
 
 [![Docker](https://img.shields.io/badge/Docker-20.10+-blue.svg)](https://docker.com)
 [![PHP](https://img.shields.io/badge/PHP-7.4%20%7C%208.4-purple.svg)](https://php.net)
@@ -17,7 +19,7 @@
 - **Zero Configuration**: Không cần setup phức tạp, chỉ cần 1 lệnh
 
 ### 🌐 Advanced Auto Domain System
-- **Dynamic Routing**: Tự động tạo domain [project].asmo-tranding.io
+- **Dynamic Routing**: Tự động tạo domain [project].io
 - **Nginx Integration**: Cấu hình reverse proxy tự động
 - **SSL Ready**: Hỗ trợ SSL certificates cho development
 
@@ -40,18 +42,53 @@
 - **Hot Reload**: Auto-restart khi có thay đổi code
 - **Comprehensive Dashboard**: Real-time database status và monitoring
 
+### 🏗️ Professional Architecture (New 2025)
+- **Clean Code Structure**: Organized by Domain-Driven Design principles
+- **Separation of Concerns**: Clear separation between core, infrastructure, and runtime
+- **Maintainable**: Easy to extend and modify with professional directory structure
+- **Scalable**: Ready for enterprise-level development
+
+### 🌍 Cross-Platform Support (New 2025)
+- **Windows**: Native `.bat` scripts + PowerShell/CMD + Git Bash/WSL support
+- **Linux**: Native `.sh` scripts + Docker Engine + All major distributions
+- **macOS**: Native `.sh` scripts + Docker Desktop + Intel/Apple Silicon
+- **Universal Launcher**: Single entry point that auto-detects platform
+
+```
+docker_master/
+├── 📁 app/                    # Application code & infrastructure
+│   ├── 📁 services/          # Business services (platform, docker, database)
+│   ├── 📁 infrastructure/    # Docker, Nginx, monitoring
+│   ├── 📁 platforms/         # Platform templates & instances
+│   ├── 📁 scripts/           # Organized automation scripts
+│   └── 📁 config/            # Centralized configuration
+├── 📁 storage/               # Data storage (projects, logs, uploads)
+├── 📁 public/                # Public web files & dashboard
+├── 📁 docs/                  # Organized documentation
+└── 📁 bin/                   # Executable commands
+```
+
 ## ⚡ Quick Start - 30 Giây
 
-### Bước 1: Khởi Động Hệ Thống (Updated 2025)
+### Bước 1: Setup (Lần đầu tiên)
 ```bash
-# Di chuyển vào thư mục docker_master
-cd D:\www\docker_master
+# Clone repository
+git clone https://github.com/your-repo/docker_master.git
+cd docker_master
 
-# Khởi động với file cấu hình mới
-docker-compose -f docker-compose.low-ram.yml up -d
+# Setup cho platform của bạn
+config/setup.sh      # Linux/macOS
+config/setup.bat     # Windows
+```
 
-# Hoặc dùng auto-start script
-bin\auto-start.bat
+### Bước 2: Khởi Động Hệ Thống (Cross-Platform)
+```bash
+# Universal launcher (khuyến nghị - hoạt động trên mọi platform)
+./docker-master start
+
+# Hoặc platform-specific
+bin\start.bat    # Windows
+./bin/start.sh   # Linux/macOS
 
 # Kiểm tra trạng thái
 docker ps
@@ -201,7 +238,7 @@ auto-start.bat
 create.bat my-awesome-project
 
 # Access via domain
-# http://my-awesome-project.asmo-tranding.io
+# http://my-awesome-project.io
 
 # Make changes and fast restart
 fast-restart.bat
@@ -213,8 +250,8 @@ fast-restart.bat
 scripts\setup-domains.bat
 
 # Share professional URLs
-# http://user-api.asmo-tranding.io
-# http://admin-panel.asmo-tranding.io
+# http://user-api.io
+# http://admin-panel.io
 ```
 
 ## 🌟 Benefits

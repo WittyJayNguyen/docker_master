@@ -135,7 +135,7 @@ for /d %%i in (platforms\*) do (
 echo.
 echo 🌐 Domain Access (auto-configured):
 for /d %%i in (platforms\*) do (
-    echo   • %%~ni: http://%%~ni.asmo-tranding.io
+    echo   • %%~ni: http://%%~ni.io
 )
 
 echo.
@@ -185,12 +185,12 @@ del "%temp%\hosts_test" 2>nul
 REM Add domains for all platforms
 for /d %%i in (platforms\*) do (
     REM Check if domain already exists
-    findstr /C:"%%~ni.asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
+    findstr /C:"%%~ni.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
     if errorlevel 1 (
-        echo 127.0.0.1 %%~ni.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
-        echo ✅ Domain configured: %%~ni.asmo-tranding.io
+        echo 127.0.0.1 %%~ni.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
+        echo ✅ Domain configured: %%~ni.io
     ) else (
-        echo ✅ Domain exists: %%~ni.asmo-tranding.io
+        echo ✅ Domain exists: %%~ni.io
     )
 )
 
@@ -255,7 +255,7 @@ exit /b 0
 :test_platform_domain
 set platform_name=%~1
 
-powershell -Command "try { Invoke-WebRequest -Uri 'http://%platform_name%.asmo-tranding.io' -TimeoutSec 3 -UseBasicParsing | Out-Null; Write-Host '✅ Domain %platform_name%: Working' -ForegroundColor Green } catch { Write-Host '💡 Domain %platform_name%: Run scripts\setup-domains.bat' -ForegroundColor Cyan }" 2>nul
+powershell -Command "try { Invoke-WebRequest -Uri 'http://%platform_name%.io' -TimeoutSec 3 -UseBasicParsing | Out-Null; Write-Host '✅ Domain %platform_name%: Working' -ForegroundColor Green } catch { Write-Host '💡 Domain %platform_name%: Run scripts\setup-domains.bat' -ForegroundColor Cyan }" 2>nul
 exit /b 0
 
 :open_all_platforms

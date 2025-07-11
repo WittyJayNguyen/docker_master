@@ -1,0 +1,166 @@
+version: '3.8'
+
+# Docker Master Platform - Cross-Platform Configuration
+# Optimized for Windows, Linux, and macOS compatibility
+#
+# Features:
+# - Cross-platform volume mounts
+# - Relative paths for portability
+# - Environment variable support
+# - Resource optimization
+# - Health checks for all services
+
+# Common environment variables
+x-common-variables: &common-variables
+  COMPOSE_PROJECT_NAME: docker_master
+  COMPOSE_FILE: docker-compose.cross-platform.yml
+
+services:
+  # PostgreSQL - Primary database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_cross_platform
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../../storage/logs/postgresql:/var/log/postgresql
+      - ../../database/postgresql/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-docker_master}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_pass}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres_user}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis - Cache and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cross_platform
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+      - ../../storage/logs/redis:/var/log/redis
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Laravel PHP 8.4 - Modern Laravel applications
+  laravel-php84:
+    build:
+      context: ../../app/infrastructure/docker/php84
+      dockerfile: Dockerfile
+      args:
+        - PHP_VERSION=8.4
+        - ENABLE_XDEBUG=${ENABLE_XDEBUG:-true}
+        - ENABLE_OPCACHE=${ENABLE_OPCACHE:-true}
+    container_name: laravel_php84_cross_platform
+    restart: unless-stopped
+    ports:
+      - "${LARAVEL84_PORT:-8010}:80"
+      - "${LARAVEL84_DEBUG_PORT:-9084}:9003"
+    volumes:
+      - ../../storage/app/projects/laravel-php84-psql:/var/www/html
+      - ../../storage/logs/apache/laravel-php84:/var/log/apache2
+      - ../../storage/logs/php/laravel-php84:/var/log/php
+      - ../../storage/app/uploads/laravel-php84:/app/uploads
+      - ../../public:/var/www/dashboard:ro
+    environment:
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - PHP_MAX_EXECUTION_TIME=300
+      - PHP_UPLOAD_MAX_FILESIZE=64M
+      - PHP_POST_MAX_SIZE=64M
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - DB_HOST=postgres_cross_platform
+      - DB_PORT=5432
+      - DB_DATABASE=${POSTGRES_DB:-docker_master}
+      - DB_USERNAME=${POSTGRES_USER:-postgres_user}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres_pass}
+      - REDIS_HOST=redis_cross_platform
+      - REDIS_PORT=6379
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    networks:
+      - docker_master_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # MySQL - Secondary database for WordPress/legacy
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_cross_platform
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../../storage/logs/mysql:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-docker_master}
+      MYSQL_USER: ${MYSQL_USER:-mysql_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql_pass}
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER:-mysql_user}", "-p${MYSQL_PASSWORD:-mysql_pass}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Networks
+networks:
+  docker_master_network:
+    driver: bridge
+    name: docker_master_cross_platform
+
+# Volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+    name: docker_master_postgres_data
+  redis_data:
+    driver: local
+    name: docker_master_redis_data
+  mysql_data:
+    driver: local
+    name: docker_master_mysql_data

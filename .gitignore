@@ -1,11 +1,24 @@
 # Docker Master Platform - Git Ignore Rules
+# Updated for new professional structure
 
-# Docker data directories
-data/
-!data/.gitkeep
+# Runtime Data (should not be committed)
+runtime/projects/*
+runtime/logs/*
+runtime/data/*
+runtime/backups/*
 
-# MySQL specific files
-data/mysql/
+# Keep runtime directory structure but ignore contents
+!runtime/projects/.gitkeep
+!runtime/logs/.gitkeep
+!runtime/data/.gitkeep
+!runtime/backups/.gitkeep
+
+# Docker volumes and data
+**/postgres_data/
+**/mysql_data/
+**/redis_data/
+
+# Database specific files
 *.sock
 *.pid
 *.log
@@ -13,22 +26,10 @@ auto.cnf
 binlog.*
 ib_*
 mysql.sock*
-
-# PostgreSQL specific files
-data/postgres/
 postmaster.pid
 postgresql.conf.backup
-
-# Redis specific files
-data/redis/
 dump.rdb
 appendonly.aof
-
-# Log directories
-logs/
-!logs/.gitkeep
-config/logs/
-*.log
 
 # Temporary files
 *.tmp
@@ -53,14 +54,33 @@ docker-compose.override.yml
 Thumbs.db
 desktop.ini
 
-# Project specific
-projects/*/vendor/
-projects/*/node_modules/
-projects/*/storage/logs/
-projects/*/storage/framework/cache/
-projects/*/storage/framework/sessions/
-projects/*/storage/framework/views/
-projects/*/.env
+# Project specific (now in runtime/)
+runtime/projects/*/vendor/
+runtime/projects/*/node_modules/
+runtime/projects/*/storage/logs/
+runtime/projects/*/storage/framework/cache/
+runtime/projects/*/storage/framework/sessions/
+runtime/projects/*/storage/framework/views/
+runtime/projects/*/.env
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Laravel specific
+storage/app/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*
+
+# WordPress specific
+wp-config.php
+wp-content/uploads/*
+wp-content/cache/*
 
 # Backup files
 *.backup

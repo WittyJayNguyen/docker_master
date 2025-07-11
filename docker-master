@@ -1,0 +1,154 @@
+#!/bin/bash
+# Docker Master Platform - Universal Launcher
+# Works on Windows (Git Bash/WSL), Linux, and macOS
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+# Function to print colored output
+print_color() {
+    local color=$1
+    local message=$2
+    echo -e "${color}${message}${NC}"
+}
+
+# Function to detect operating system
+detect_os() {
+    case "$OSTYPE" in
+        msys*|mingw*|cygwin*)
+            echo "windows"
+            ;;
+        darwin*)
+            echo "macos"
+            ;;
+        linux*)
+            echo "linux"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
+}
+
+# Function to check if running on Windows environment
+is_windows_env() {
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "mingw"* ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+        return 0
+    elif [[ -n "$WSL_DISTRO_NAME" ]] || [[ -n "$WSLENV" ]]; then
+        return 0
+    elif [[ "$(uname -r)" == *"Microsoft"* ]] || [[ "$(uname -r)" == *"microsoft"* ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to run appropriate script
+run_script() {
+    local script_name="$1"
+    shift
+    local args="$@"
+    
+    if is_windows_env; then
+        # Windows environment - prefer .bat files
+        if [[ -f "bin/${script_name}.bat" ]]; then
+            print_color $BLUE "🖥️ Running Windows script: bin/${script_name}.bat"
+            if command -v cmd.exe >/dev/null 2>&1; then
+                cmd.exe /c "bin\\${script_name}.bat $args"
+            else
+                # Fallback to .sh if cmd.exe not available (pure WSL)
+                chmod +x "bin/${script_name}.sh" 2>/dev/null || true
+                "./bin/${script_name}.sh" $args
+            fi
+        elif [[ -f "bin/${script_name}.sh" ]]; then
+            print_color $BLUE "🐧 Running Unix script: bin/${script_name}.sh"
+            chmod +x "bin/${script_name}.sh"
+            "./bin/${script_name}.sh" $args
+        else
+            print_color $RED "❌ Script not found: ${script_name}"
+            exit 1
+        fi
+    else
+        # Unix environment - use .sh files
+        local os=$(detect_os)
+        print_color $BLUE "🐧 Detected $os - running Unix script: bin/${script_name}.sh"
+        
+        if [[ -f "bin/${script_name}.sh" ]]; then
+            chmod +x "bin/${script_name}.sh"
+            "./bin/${script_name}.sh" $args
+        else
+            print_color $RED "❌ Unix script not found: bin/${script_name}.sh"
+            exit 1
+        fi
+    fi
+}
+
+# Function to show help
+show_help() {
+    print_color $CYAN "🐳 Docker Master Platform - Universal Launcher"
+    print_color $CYAN "================================================================"
+    echo ""
+    print_color $YELLOW "Cross-platform launcher that works on Windows, Linux, and macOS"
+    echo ""
+    print_color $GREEN "Usage: ./docker-master [command] [args...]"
+    echo ""
+    print_color $PURPLE "Available Commands:"
+    echo "  start           - Start the platform"
+    echo "  stop            - Stop the platform"  
+    echo "  restart         - Restart the platform"
+    echo "  status          - Show system status"
+    echo "  create [name]   - Create new platform"
+    echo "  docker-compose  - Docker compose wrapper"
+    echo ""
+    print_color $PURPLE "Examples:"
+    echo "  ./docker-master start"
+    echo "  ./docker-master create my-blog"
+    echo "  ./docker-master docker-compose ps"
+    echo "  ./docker-master status"
+    echo ""
+    print_color $YELLOW "Platform Detection:"
+    local os=$(detect_os)
+    if is_windows_env; then
+        print_color $BLUE "  Current: Windows environment (will use .bat scripts)"
+    else
+        print_color $BLUE "  Current: $os environment (will use .sh scripts)"
+    fi
+    echo ""
+}
+
+# Main function
+main() {
+    if [[ $# -eq 0 ]]; then
+        show_help
+        exit 0
+    fi
+    
+    local command="$1"
+    shift
+    
+    case "$command" in
+        help|--help|-h)
+            show_help
+            ;;
+        *)
+            run_script "$command" "$@"
+            ;;
+    esac
+}
+
+# Make sure we're in the right directory
+if [[ ! -f "README.md" ]] || [[ ! -d "bin" ]]; then
+    print_color $RED "❌ Please run this script from the docker_master root directory"
+    exit 1
+fi
+
+# Run main function with all arguments
+main "$@"

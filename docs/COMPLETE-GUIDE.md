@@ -121,9 +121,9 @@ Hệ thống tự động phát hiện loại project dựa trên tên:
 ### 🌐 Auto Domain System
 ```bash
 # Tự động tạo domains:
-my-shop.asmo-tranding.io     → Laravel E-commerce
-my-blog.asmo-tranding.io     → WordPress Blog
-api-service.asmo-tranding.io → Laravel API
+my-shop.io     → Laravel E-commerce
+my-blog.io     → WordPress Blog
+api-service.io → Laravel API
 
 # Nginx tự động cấu hình routing
 # SSL certificates tự động (development)
