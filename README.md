@@ -94,9 +94,9 @@ http://localhost:8030/phpinfo.php?XDEBUG_SESSION_START=VSCODE
 ## 🌐 Professional URLs
 
 Thay vì `http://localhost:8015`, bạn có:
-- **WordPress**: http://my-blog.asmo-tranding.io
-- **Laravel API**: http://user-api.asmo-tranding.io
-- **E-commerce**: http://online-shop.asmo-tranding.io
+- **WordPress**: http://my-blog.io
+- **Laravel API**: http://user-api.io
+- **E-commerce**: http://online-shop.io
 
 ## 🤖 AI Auto-Detection Examples
 
@@ -201,7 +201,7 @@ auto-start.bat
 create.bat my-awesome-project
 
 # Access via domain
-# http://my-awesome-project.asmo-tranding.io
+# http://my-awesome-project.io
 
 # Make changes and fast restart
 fast-restart.bat

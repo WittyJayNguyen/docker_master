@@ -59,7 +59,7 @@ echo 📝 Platform Domain Structure:
 echo ----------------------------------------------------------------
 if exist "platforms\" (
     for /d %%i in (platforms\*) do (
-        echo   • %%~ni → http://%%~ni.asmo-tranding.io
+        echo   • %%~ni → http://%%~ni.io
     )
 ) else (
     echo   • No platforms created yet
@@ -106,7 +106,7 @@ echo 🔧 Auto-Generated Config Template:
 echo ----------------------------------------------------------------
 echo server {
 echo     listen 80;
-echo     server_name [platform].asmo-tranding.io;
+echo     server_name [platform].io;
 echo     location / {
 echo         proxy_pass http://[platform]_php[version]:80;
 echo         proxy_set_header Host $host;

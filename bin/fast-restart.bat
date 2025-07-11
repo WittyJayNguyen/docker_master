@@ -133,7 +133,7 @@ for /d %%i in (platforms\*) do (
 echo.
 echo 🌐 Domain URLs:
 for /d %%i in (platforms\*) do (
-    echo   • %%~ni: http://%%~ni.asmo-tranding.io
+    echo   • %%~ni: http://%%~ni.io
 )
 
 echo.
@@ -170,10 +170,10 @@ del "%temp%\hosts_test" 2>nul
 
 REM Quick check and add missing domains
 for /d %%i in (platforms\*) do (
-    findstr /C:"%%~ni.asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
+    findstr /C:"%%~ni.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
     if errorlevel 1 (
-        echo 127.0.0.1 %%~ni.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
-        echo ✅ Added domain: %%~ni.asmo-tranding.io
+        echo 127.0.0.1 %%~ni.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
+        echo ✅ Added domain: %%~ni.io
     )
 )
 

@@ -244,7 +244,7 @@ networks:
 # templates/nginx.template.conf
 server {
     listen 80;
-    server_name {{PROJECT_NAME}}.asmo-tranding.io;
+    server_name {{PROJECT_NAME}}.io;
     
     location / {
         proxy_pass http://{{PROJECT_NAME}}_php84:80;

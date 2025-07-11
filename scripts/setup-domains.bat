@@ -23,7 +23,7 @@ echo ----------------------------------------------------------------
 REM List current platforms
 if exist "platforms\" (
     for /d %%i in (platforms\*) do (
-        echo   • %%~ni.asmo-tranding.io
+        echo   • %%~ni.io
     )
 ) else (
     echo   • No platforms created yet
@@ -36,10 +36,10 @@ echo ================================================================
 echo ⚠️  IMPORTANT: This requires Administrator privileges!
 echo.
 echo The following entries will be added to your hosts file:
-echo   127.0.0.1 wp-blog-example.asmo-tranding.io
-echo   127.0.0.1 laravel74-api-example.asmo-tranding.io
-echo   127.0.0.1 laravel84-shop-example.asmo-tranding.io
-echo   127.0.0.1 [your-platform].asmo-tranding.io
+echo   127.0.0.1 wp-blog-example.io
+echo   127.0.0.1 laravel74-api-example.io
+echo   127.0.0.1 laravel84-shop-example.io
+echo   127.0.0.1 [your-platform].io
 
 echo.
 set /p confirm="Do you want to continue? (y/n): "
@@ -78,13 +78,13 @@ echo.
 echo 🔧 Adding domain entries...
 
 REM Check if entries already exist
-findstr /C:"asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul
+findstr /C:".io" "%SystemRoot%\System32\drivers\etc\hosts" >nul
 if not errorlevel 1 (
-    echo ⚠️  Some asmo-tranding.io entries already exist.
+    echo ⚠️  Some .io entries already exist.
     echo ℹ️  Removing old entries first...
-    
-    REM Create temp file without asmo-tranding.io entries
-    findstr /V /C:"asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" > "%temp%\hosts_temp"
+
+    REM Create temp file without .io entries
+    findstr /V /C:".io" "%SystemRoot%\System32\drivers\etc\hosts" > "%temp%\hosts_temp"
     copy "%temp%\hosts_temp" "%SystemRoot%\System32\drivers\etc\hosts" >nul
     del "%temp%\hosts_temp" >nul
     echo ✅ Old entries removed.
@@ -92,20 +92,20 @@ if not errorlevel 1 (
 
 REM Add new entries
 echo.
-echo # Docker Master Platform - asmo-tranding.io domains >> "%SystemRoot%\System32\drivers\etc\hosts"
+echo # Docker Master Platform - .io domains >> "%SystemRoot%\System32\drivers\etc\hosts"
 echo # Auto-generated entries for platform access >> "%SystemRoot%\System32\drivers\etc\hosts"
 
 REM Add entries for existing platforms
 if exist "platforms\" (
     for /d %%i in (platforms\*) do (
-        echo 127.0.0.1 %%~ni.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts"
-        echo ✅ Added: %%~ni.asmo-tranding.io
+        echo 127.0.0.1 %%~ni.io >> "%SystemRoot%\System32\drivers\etc\hosts"
+        echo ✅ Added: %%~ni.io
     )
 )
 
 REM Add wildcard entry for future platforms
-echo 127.0.0.1 *.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts"
-echo ✅ Added wildcard: *.asmo-tranding.io
+echo 127.0.0.1 *.io >> "%SystemRoot%\System32\drivers\etc\hosts"
+echo ✅ Added wildcard: *.io
 
 echo.
 echo 🎉 DOMAIN SETUP COMPLETED!
@@ -123,7 +123,7 @@ echo ================================================================
 echo 📝 Instead of localhost ports, use domains:
 echo ----------------------------------------------------------------
 echo   OLD: http://localhost:8015
-echo   NEW: http://wp-blog-example.asmo-tranding.io
+echo   NEW: http://wp-blog-example.io
 
 echo   OLD: http://localhost:8016  
 echo   NEW: http://laravel74-api-example.asmo-tranding.io

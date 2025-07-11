@@ -75,7 +75,7 @@ echo.
 echo 🌐 ACCESS URLS:
 echo ----------------------------------------------------------------
 echo   • Direct Access:    http://localhost:8090
-echo   • Domain Access:    http://asmo-foodservice.asmo-tranding.io
+echo   • Domain Access:    http://asmo-foodservice.io
 echo   • Your Project:     http://localhost:8090/[your-files]
 
 echo.

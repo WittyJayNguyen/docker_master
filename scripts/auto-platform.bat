@@ -281,7 +281,7 @@ echo ✅ Platform Details:
 echo   • Name: %PLATFORM_NAME%
 echo   • Type: %PROJECT_DESCRIPTION%
 echo   • URL: http://localhost:%PLATFORM_PORT%
-echo   • Domain: http://%PLATFORM_NAME%.asmo-tranding.io
+echo   • Domain: http://%PLATFORM_NAME%.io
 echo   • Database: %DB_NAME%
 echo.
 echo 💡 Quick Commands:
@@ -354,7 +354,7 @@ REM Create Nginx configuration for the platform
 echo # %PLATFORM_NAME% - Auto-generated Nginx configuration
 echo server {
 echo     listen 80;
-echo     server_name %PLATFORM_NAME%.asmo-tranding.io;
+echo     server_name %PLATFORM_NAME%.io;
 echo.
 echo     location / {
 echo         proxy_pass http://%PLATFORM_NAME%_php%PHP_VERSION%:80;
@@ -409,19 +409,19 @@ del "%SystemRoot%\System32\drivers\etc\hosts_test" 2>nul
 del "%temp%\hosts_test" 2>nul
 
 REM Check if domain already exists
-findstr /C:"%PLATFORM_NAME%.asmo-tranding.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
+findstr /C:"%PLATFORM_NAME%.io" "%SystemRoot%\System32\drivers\etc\hosts" >nul 2>&1
 if not errorlevel 1 (
-    echo ✅ Domain %PLATFORM_NAME%.asmo-tranding.io already configured
+    echo ✅ Domain %PLATFORM_NAME%.io already configured
     exit /b 0
 )
 
 REM Add domain entry
-echo 127.0.0.1 %PLATFORM_NAME%.asmo-tranding.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
+echo 127.0.0.1 %PLATFORM_NAME%.io >> "%SystemRoot%\System32\drivers\etc\hosts" 2>nul
 if errorlevel 1 (
     echo ⚠️  Could not auto-configure domain
     echo 💡 Run manually: scripts\setup-domains.bat
 ) else (
-    echo ✅ Domain auto-configured: %PLATFORM_NAME%.asmo-tranding.io
+    echo ✅ Domain auto-configured: %PLATFORM_NAME%.io
 )
 exit /b 0
 

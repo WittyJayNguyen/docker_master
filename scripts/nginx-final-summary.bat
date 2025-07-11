@@ -43,7 +43,7 @@ echo ----------------------------------------------------------------
 if exist "nginx\conf.d\*.conf" (
     for %%f in (nginx\conf.d\*.conf) do (
         if not "%%~nf"=="default" (
-            echo   ✅ %%~nf.conf → http://%%~nf.asmo-tranding.io
+            echo   ✅ %%~nf.conf → http://%%~nf.io
         )
     )
 ) else (
@@ -58,7 +58,7 @@ echo 📝 Available Platform Domains:
 echo ----------------------------------------------------------------
 if exist "platforms\" (
     for /d %%i in (platforms\*) do (
-        echo   🌐 %%~ni → http://%%~ni.asmo-tranding.io
+        echo   🌐 %%~ni → http://%%~ni.io
     )
 ) else (
     echo   • No platforms created yet

@@ -70,9 +70,9 @@ echo   • PostgreSQL:         localhost:5432 (postgres_user/postgres_pass)
 echo.
 echo 🌐 Domain URLs (after hosts setup):
 echo ----------------------------------------------------------------
-echo   • WordPress:          http://wp-blog-example.asmo-tranding.io
-echo   • Laravel 7.4:        http://laravel74-api-example.asmo-tranding.io
-echo   • Laravel 8.4:        http://laravel84-shop-example.asmo-tranding.io
+echo   • WordPress:          http://wp-blog-example.io
+echo   • Laravel 7.4:        http://laravel74-api-example.io
+echo   • Laravel 8.4:        http://laravel84-shop-example.io
 
 echo.
 echo 💡 Setup Domain Routing:

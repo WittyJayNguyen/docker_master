@@ -18,7 +18,7 @@ echo ✅ AUTO DOMAIN SYSTEM:
 echo   • Auto domain setup when creating platforms
 echo   • Auto hosts file configuration (if admin rights)
 echo   • Auto Nginx configuration generation
-echo   • Domain pattern: [platform-name].asmo-tranding.io
+echo   • Domain pattern: [platform-name].io
 
 echo.
 echo ✅ AUTO RESTART SYSTEM:
@@ -52,7 +52,7 @@ echo ================================================================
 
 echo 📝 Auto-configured domains:
 for /d %%i in (platforms\*) do (
-    echo   • %%~ni.asmo-tranding.io
+    echo   • %%~ni.io
 )
 
 echo.
@@ -151,17 +151,17 @@ echo ================================================================
 
 echo 📝 Domain Pattern:
 echo ----------------------------------------------------------------
-echo   [platform-name].asmo-tranding.io
-echo   
+echo   [platform-name].io
+echo
 echo   Examples:
-echo   • my-blog.asmo-tranding.io
-echo   • user-api.asmo-tranding.io
-echo   • online-shop.asmo-tranding.io
+echo   • my-blog.io
+echo   • user-api.io
+echo   • online-shop.io
 
 echo.
 echo 📝 Auto Configuration:
 echo ----------------------------------------------------------------
-echo   • Hosts file: 127.0.0.1 [platform].asmo-tranding.io
+echo   • Hosts file: 127.0.0.1 [platform].io
 echo   • Nginx config: Auto-generated proxy rules
 echo   • SSL ready: HTTPS support prepared
 echo   • Load balancing ready: Multiple containers support

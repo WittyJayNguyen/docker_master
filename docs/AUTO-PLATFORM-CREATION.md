@@ -4,7 +4,7 @@
 
 Docker Master Platform có hệ thống **AI Auto-Detection + Auto Domain + Auto Restart** thông minh để:
 - 🧠 **AI Detection**: Tự động chọn database, PHP version, platform type
-- 🌐 **Auto Domain**: Tự động tạo domain [project].asmo-tranding.io
+- 🌐 **Auto Domain**: Tự động tạo domain [project].io
 - 🔧 **Auto Nginx**: Tự động tạo và reload Nginx configuration
 - 🗄️ **Auto Database**: Tự động tạo database với permissions
 - ⚡ **Fast Restart**: Apply changes trong 0.1 giây
@@ -48,23 +48,23 @@ create.bat portfolio-site    → MySQL + WordPress + PHP 7.4 + portfolio-site.as
 
 **API/Service Keywords:**
 ```bash
-create.bat user-api          → PostgreSQL + Laravel 8.4 + API + user-api.asmo-tranding.io
-create.bat payment-service   → PostgreSQL + Laravel 8.4 + API + payment-service.asmo-tranding.io
-create.bat notification-api  → PostgreSQL + Laravel 8.4 + API + notification-api.asmo-tranding.io
-create.bat auth-microservice → PostgreSQL + Laravel 8.4 + API + auth-microservice.asmo-tranding.io
+create.bat user-api          → PostgreSQL + Laravel 8.4 + API + user-api.io
+create.bat payment-service   → PostgreSQL + Laravel 8.4 + API + payment-service.io
+create.bat notification-api  → PostgreSQL + Laravel 8.4 + API + notification-api.io
+create.bat auth-microservice → PostgreSQL + Laravel 8.4 + API + auth-microservice.io
 ```
 
 **Default Laravel:**
 ```bash
-create.bat my-app            → PostgreSQL + Laravel 8.4 + API + my-app.asmo-tranding.io
-create.bat web-application   → PostgreSQL + Laravel 8.4 + API + web-application.asmo-tranding.io
+create.bat my-app            → PostgreSQL + Laravel 8.4 + API + my-app.io
+create.bat web-application   → PostgreSQL + Laravel 8.4 + API + web-application.io
 ```
 
 ## 🌐 Auto Domain System
 
 ### Domain Pattern:
 ```
-[project-name].asmo-tranding.io
+[project-name].io
 ```
 
 ### Auto Configuration Process:
@@ -79,7 +79,7 @@ create.bat web-application   → PostgreSQL + Laravel 8.4 + API + web-applicatio
 ```bash
 create.bat tech-blog
 # Result:
-# - Domain: http://tech-blog.asmo-tranding.io
+# - Domain: http://tech-blog.io
 # - Direct: http://localhost:8015
 # - Type: WordPress + MySQL + PHP 7.4
 # - Auto Nginx config created

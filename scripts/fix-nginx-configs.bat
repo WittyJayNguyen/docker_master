@@ -127,7 +127,7 @@ REM Create Nginx configuration
 echo # %platform_name% - Auto-generated Nginx configuration
 echo server {
 echo     listen 80;
-echo     server_name %platform_name%.asmo-tranding.io;
+echo     server_name %platform_name%.io;
 echo.
 echo     location / {
 echo         proxy_pass http://%container_name%:80;
