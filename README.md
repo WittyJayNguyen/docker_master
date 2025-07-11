@@ -11,6 +11,38 @@
 [![Xdebug](https://img.shields.io/badge/Xdebug-3.3+-orange.svg)](https://xdebug.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+## � Table of Contents
+
+- [📚 Documentation & Guides](#-documentation--guides)
+- [🌟 Tính Năng Nổi Bật](#-tính-năng-nổi-bật)
+- [📁 Directory Structure](#-directory-structure-explained)
+- [⚡ Quick Start](#-quick-start---30-giây)
+- [🔧 Advanced Usage](#-advanced-usage)
+- [💡 Pro Tips](#-pro-tips)
+- [🆘 Support & Resources](#-support--resources)
+
+## �📚 Documentation & Guides
+
+### **🚀 Quick Start**
+- **[Cross-Platform Installation](docs/user-guide/CROSS-PLATFORM-INSTALLATION.md)** - Setup cho Windows, Linux, macOS
+- **[Quick Reference Guide](docs/user-guide/QUICK-REFERENCE.md)** - Essential commands và usage patterns
+- **[Complete Guide](docs/COMPLETE-GUIDE.md)** - Comprehensive tutorial từ A-Z
+
+### **🏗️ Architecture & Structure**
+- **[Professional Structure Overview](docs/architecture/FINAL-STRUCTURE-SUMMARY.md)** - Giải thích cấu trúc enterprise-level
+- **[Directory Organization](docs/architecture/PROFESSIONAL-STRUCTURE-SUMMARY.md)** - Chi tiết về app/, public/, storage/
+- **[Configuration Management](app/config/README.md)** - Quản lý cấu hình tập trung
+
+### **🔧 Development**
+- **[Developer Guide](docs/developer-guide/)** - Advanced development topics
+- **[Auto Platform Creation](docs/developer-guide/AUTO-PLATFORM-CREATION.md)** - AI-powered platform generation
+- **[Debug Setup](docs/developer-guide/04-DEBUG-SETUP.md)** - Xdebug configuration cho multi-PHP
+
+### **🛠️ Support & Troubleshooting**
+- **[Troubleshooting Guide](docs/troubleshooting/)** - Common issues và solutions
+- **[Cross-Platform Issues](docs/project-management/CROSS-PLATFORM-SUMMARY.md)** - Platform-specific problems
+- **[Complete Documentation Index](docs/DOCUMENTATION-INDEX.md)** - Tất cả documentation có sẵn
+
 ## 🌟 Tính Năng Nổi Bật
 
 ### 🤖 AI-Powered Auto-Detection
@@ -65,10 +97,24 @@ docker_master/
 ├── 📁 storage/               # Data storage (projects, logs, uploads)
 ├── 📁 public/                # Public web files & dashboard
 ├── 📁 docs/                  # Organized documentation
+├── 📁 config/                # Setup & environment files
 └── 📁 bin/                   # Executable commands
 ```
 
+### **📁 Directory Structure Explained**
+
+- **`app/`** - [Application Code](app/README.md): Core business logic, infrastructure, và automation scripts
+- **`storage/`** - [Data Storage](storage/README.md): Projects, logs, uploads, cache, backups
+- **`public/`** - Public Web Files: Dashboard, assets, API endpoints
+- **`docs/`** - [Documentation](docs/DOCUMENTATION-INDEX.md): Comprehensive guides và references
+- **`config/`** - Configuration: Setup scripts, environment templates
+- **`bin/`** - Executable Commands: Cross-platform scripts cho daily operations
+
+> **📖 Chi tiết:** [Professional Structure Overview](docs/architecture/FINAL-STRUCTURE-SUMMARY.md)
+
 ## ⚡ Quick Start - 30 Giây
+
+> **📖 Chi tiết:** [Cross-Platform Installation Guide](docs/user-guide/CROSS-PLATFORM-INSTALLATION.md)
 
 ### Bước 1: Setup (Lần đầu tiên)
 ```bash
@@ -80,6 +126,8 @@ cd docker_master
 config/setup.sh      # Linux/macOS
 config/setup.bat     # Windows
 ```
+
+> **💡 Tip:** Xem [Setup Troubleshooting](docs/troubleshooting/) nếu gặp vấn đề
 
 ### Bước 2: Khởi Động Hệ Thống (Cross-Platform)
 ```bash
@@ -94,20 +142,22 @@ bin\start.bat    # Windows
 docker ps
 ```
 
-### Bước 2: Tạo Platform Đầu Tiên
+### Bước 3: Tạo Platform Đầu Tiên
 ```bash
 # AI tự động chọn cấu hình dựa trên tên
-bin\create.bat my-shop
+./docker-master create my-shop
 
 # Kết quả tự động:
 # ✅ Laravel 8.4 + MySQL (E-commerce detected)
-# ✅ Domain: my-shop.asmo-tranding.io
+# ✅ Domain: my-shop.io
 # ✅ Port: 8010
 # ✅ Database: my_shop_db
 # ✅ Xdebug: Port 9084
 ```
 
-### Bước 3: Truy Cập và Monitor (URLs 2025)
+> **📖 Chi tiết:** [Auto Platform Creation Guide](docs/developer-guide/AUTO-PLATFORM-CREATION.md)
+
+### Bước 4: Truy Cập và Monitor (URLs 2025)
 ```bash
 # Main Dashboard
 http://localhost:8010
@@ -121,6 +171,12 @@ http://localhost:8030              # WordPress PHP 7.4 Platform
 http://localhost:8010/test-db.php  # Database Connection Test
 http://localhost:8010/phpinfo.php # PHP Info với Xdebug Status
 http://localhost:8025              # Mailhog Email Testing
+
+# Professional Domains (auto-configured)
+http://my-shop.io                  # Your created platform
+```
+
+> **📖 Chi tiết:** [Quick Reference Guide](docs/user-guide/QUICK-REFERENCE.md) | [Debug Setup](docs/developer-guide/04-DEBUG-SETUP.md)
 
 # Xdebug Testing
 http://localhost:8010/phpinfo.php?XDEBUG_SESSION_START=VSCODE
@@ -308,14 +364,26 @@ scripts\setup-domains.bat
 - Check `docker ps` to see all running platforms
 - Use VS Code with provided debug configurations
 
-## 🆘 Support
+## 🆘 Support & Resources
 
-- **Issues**: Check [Troubleshooting Guide](docs/06-TROUBLESHOOTING.md)
-- **Documentation**: Browse [docs/](docs/) folder
-- **Examples**: See [EXAMPLES-GUIDE.md](EXAMPLES-GUIDE.md)
+### **📖 Documentation**
+- **[Complete Documentation Index](docs/DOCUMENTATION-INDEX.md)** - All available guides
+- **[Troubleshooting Guide](docs/troubleshooting/)** - Common issues và solutions
+- **[Developer Guide](docs/developer-guide/)** - Advanced development topics
+- **[Examples Guide](docs/EXAMPLES-GUIDE.md)** - Practical examples
+
+### **🏗️ Architecture & Structure**
+- **[Professional Structure](docs/architecture/FINAL-STRUCTURE-SUMMARY.md)** - Enterprise-level organization
+- **[Configuration Guide](app/config/README.md)** - Configuration management
+- **[Cross-Platform Setup](docs/user-guide/CROSS-PLATFORM-INSTALLATION.md)** - Multi-OS support
+
+### **🔧 Development Tools**
+- **[Auto Platform Creation](docs/developer-guide/AUTO-PLATFORM-CREATION.md)** - AI-powered platform generation
+- **[Debug Setup](docs/developer-guide/04-DEBUG-SETUP.md)** - Xdebug configuration
+- **[Quick Reference](docs/user-guide/QUICK-REFERENCE.md)** - Essential commands
 
 ---
 
-**🌟 Professional Docker development environment with AI automation and instant domain routing!**
+**🌟 Professional Docker development environment with AI automation, cross-platform support, and enterprise-ready structure!**
 
-**Made with ❤️ for developers who want zero-configuration, maximum productivity.**
+**Made with ❤️ for developers who want zero-configuration, maximum productivity, and professional standards.**
