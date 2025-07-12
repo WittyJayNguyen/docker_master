@@ -27,6 +27,26 @@
 - **Smart Caching**: Redis + OPcache + Database optimization
 - **Resource Monitoring**: Real-time RAM và performance tracking
 
+## 🏗️ Kiến Trúc Mới 2025 (Optimized Structure)
+
+```
+docker_master/
+├── src/                          # 🆕 Core source code
+│   ├── core/                     # Core business logic
+│   ├── services/                 # Service layer
+│   ├── utils/                    # Utility functions
+│   └── config/                   # Configuration management
+├── cli/                          # 🆕 Modern CLI tools
+├── automation/                   # 🆕 Organized automation scripts
+├── platforms/                   # ✅ Platform definitions (giữ nguyên)
+├── nginx/                       # ✅ Nginx configurations (giữ nguyên)
+├── projects/                    # ✅ Project workspaces (giữ nguyên)
+├── docker/                      # 🔄 Optimized Docker images
+├── docs/                        # 🔄 Structured documentation
+├── config/                      # 🔄 Enhanced configurations
+└── tools/                       # 🔄 Professional utilities
+```
+
 ### 🗄️ Dual Database Support (Updated 2025)
 - **PostgreSQL 15**: Primary database với credentials: postgres_user/postgres_pass
 - **MySQL 8.0**: Secondary database với credentials: mysql_user/mysql_pass

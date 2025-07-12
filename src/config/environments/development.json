@@ -1,0 +1,71 @@
+{
+  "logging": {
+    "level": "debug",
+    "console": true,
+    "file": "./logs/development.log",
+    "format": "pretty"
+  },
+  "docker": {
+    "buildTimeout": 600,
+    "startTimeout": 120,
+    "pullImages": false
+  },
+  "database": {
+    "postgres": {
+      "maxConnections": 20,
+      "logQueries": true
+    },
+    "mysql": {
+      "maxConnections": 20,
+      "logQueries": true
+    }
+  },
+  "platform": {
+    "autoStart": true,
+    "autoReload": true,
+    "hotReload": true
+  },
+  "nginx": {
+    "reloadOnChange": true,
+    "accessLogs": true,
+    "errorLogs": true
+  },
+  "monitoring": {
+    "interval": 10,
+    "detailed": true,
+    "alerts": {
+      "enabled": false
+    }
+  },
+  "autoDiscovery": {
+    "verbose": true,
+    "showAlternatives": true
+  },
+  "security": {
+    "allowedHosts": ["*"],
+    "corsEnabled": true,
+    "corsOrigins": ["*"],
+    "strictMode": false
+  },
+  "performance": {
+    "caching": {
+      "enabled": false
+    },
+    "compression": {
+      "enabled": false
+    },
+    "optimization": {
+      "enabled": false
+    }
+  },
+  "debug": {
+    "enabled": true,
+    "xdebug": {
+      "enabled": true,
+      "ideKey": "VSCODE",
+      "remoteHost": "host.docker.internal"
+    },
+    "profiling": false,
+    "tracing": false
+  }
+}

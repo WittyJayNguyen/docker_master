@@ -1,0 +1,118 @@
+{
+  "logging": {
+    "level": "warn",
+    "console": false,
+    "file": "./logs/production.log",
+    "format": "json",
+    "maxFileSize": "50MB",
+    "maxFiles": 10
+  },
+  "docker": {
+    "buildTimeout": 900,
+    "startTimeout": 180,
+    "pullImages": true,
+    "restartPolicy": "always"
+  },
+  "database": {
+    "postgres": {
+      "maxConnections": 100,
+      "logQueries": false,
+      "poolSize": 20,
+      "connectionTimeout": 30000
+    },
+    "mysql": {
+      "maxConnections": 100,
+      "logQueries": false,
+      "poolSize": 20,
+      "connectionTimeout": 30000
+    },
+    "redis": {
+      "maxMemory": "256mb",
+      "persistence": true,
+      "clustering": false
+    }
+  },
+  "platform": {
+    "autoStart": false,
+    "autoReload": false,
+    "hotReload": false,
+    "healthChecks": true
+  },
+  "nginx": {
+    "reloadOnChange": false,
+    "accessLogs": false,
+    "errorLogs": true,
+    "sslEnabled": true,
+    "compression": true,
+    "caching": true
+  },
+  "monitoring": {
+    "interval": 60,
+    "detailed": false,
+    "alerts": {
+      "enabled": true,
+      "email": true,
+      "webhook": true
+    },
+    "retention": {
+      "logs": "30d",
+      "metrics": "90d"
+    }
+  },
+  "autoDiscovery": {
+    "verbose": false,
+    "showAlternatives": false,
+    "caching": true
+  },
+  "security": {
+    "allowedHosts": ["yourdomain.com", "www.yourdomain.com"],
+    "corsEnabled": true,
+    "corsOrigins": ["https://yourdomain.com"],
+    "strictMode": true,
+    "rateLimiting": {
+      "enabled": true,
+      "maxRequests": 1000,
+      "windowMs": 900000
+    },
+    "headers": {
+      "xFrameOptions": "DENY",
+      "xContentTypeOptions": "nosniff",
+      "xXssProtection": "1; mode=block",
+      "strictTransportSecurity": "max-age=31536000; includeSubDomains"
+    }
+  },
+  "performance": {
+    "caching": {
+      "enabled": true,
+      "ttl": 7200,
+      "maxSize": "1GB",
+      "compression": true
+    },
+    "compression": {
+      "enabled": true,
+      "level": 9,
+      "threshold": 1024
+    },
+    "optimization": {
+      "enabled": true,
+      "minifyAssets": true,
+      "bundleAssets": true,
+      "lazyLoading": true
+    }
+  },
+  "debug": {
+    "enabled": false,
+    "xdebug": {
+      "enabled": false
+    },
+    "profiling": false,
+    "tracing": false
+  },
+  "backup": {
+    "enabled": true,
+    "schedule": "0 2 * * *",
+    "retention": "30d",
+    "compression": true,
+    "encryption": true
+  }
+}
