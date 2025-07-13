@@ -1,0 +1,164 @@
+version: '3.8'
+
+# Docker Master Platform - Base Configuration
+# This file contains the core services needed for all environments
+
+services:
+  # PostgreSQL - Primary database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${POSTGRES_HOST:-postgres_low_ram}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-docker_master}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_pass}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      # Performance tuning
+      POSTGRES_SHARED_BUFFERS: ${POSTGRES_SHARED_BUFFERS:-64MB}
+      POSTGRES_EFFECTIVE_CACHE_SIZE: ${POSTGRES_EFFECTIVE_CACHE_SIZE:-192MB}
+      POSTGRES_WORK_MEM: ${POSTGRES_WORK_MEM:-4MB}
+      POSTGRES_MAINTENANCE_WORK_MEM: ${POSTGRES_MAINTENANCE_WORK_MEM:-16MB}
+      POSTGRES_MAX_CONNECTIONS: ${POSTGRES_MAX_CONNECTIONS:-50}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/database/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./config/database/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+      - ./config/database/postgres/init:/docker-entrypoint-initdb.d:ro
+      - ./logs/postgres:/var/log/postgresql
+    command: >
+      postgres
+      -c config_file=/etc/postgresql/postgresql.conf
+      -c hba_file=/etc/postgresql/pg_hba.conf
+      -c shared_buffers=${POSTGRES_SHARED_BUFFERS:-64MB}
+      -c effective_cache_size=${POSTGRES_EFFECTIVE_CACHE_SIZE:-192MB}
+      -c work_mem=${POSTGRES_WORK_MEM:-4MB}
+      -c maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-16MB}
+      -c max_connections=${POSTGRES_MAX_CONNECTIONS:-50}
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+    deploy:
+      resources:
+        limits:
+          memory: ${POSTGRES_MEMORY_LIMIT:-256M}
+          cpus: '${POSTGRES_CPU_LIMIT:-0.5}'
+        reservations:
+          memory: ${POSTGRES_MEMORY_RESERVATION:-128M}
+          cpus: '${POSTGRES_CPU_RESERVATION:-0.25}'
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres_user} -d ${POSTGRES_DB:-docker_master}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL - Secondary database for WordPress and legacy apps
+  mysql:
+    image: mysql:8.0
+    container_name: ${MYSQL_HOST:-mysql_low_ram}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-docker_master}
+      MYSQL_USER: ${MYSQL_USER:-mysql_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql_pass}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./config/database/mysql/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+      - ./config/database/mysql/init:/docker-entrypoint-initdb.d:ro
+      - ./logs/mysql:/var/log/mysql
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-128M}
+      --innodb-log-file-size=${MYSQL_INNODB_LOG_FILE_SIZE:-32M}
+      --innodb-flush-log-at-trx-commit=2
+      --innodb-flush-method=O_DIRECT
+      --max-connections=${MYSQL_MAX_CONNECTIONS:-50}
+      --query-cache-type=1
+      --query-cache-size=${MYSQL_QUERY_CACHE_SIZE:-16M}
+      --tmp-table-size=${MYSQL_TMP_TABLE_SIZE:-32M}
+      --max-heap-table-size=${MYSQL_MAX_HEAP_TABLE_SIZE:-32M}
+    deploy:
+      resources:
+        limits:
+          memory: ${MYSQL_MEMORY_LIMIT:-256M}
+          cpus: '${MYSQL_CPU_LIMIT:-0.5}'
+        reservations:
+          memory: ${MYSQL_MEMORY_RESERVATION:-128M}
+          cpus: '${MYSQL_CPU_RESERVATION:-0.25}'
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER:-mysql_user}", "-p${MYSQL_PASSWORD:-mysql_pass}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis - Cache and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: ${REDIS_HOST:-redis_low_ram}
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+      - ./config/database/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./logs/redis:/var/log/redis
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf
+      --maxmemory ${REDIS_MEMORY_LIMIT:-48mb}
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+      --appendfsync everysec
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+      --tcp-keepalive 300
+      --timeout 0
+      --databases 16
+      --logfile /var/log/redis/redis.log
+      --loglevel notice
+    deploy:
+      resources:
+        limits:
+          memory: ${REDIS_MEMORY_LIMIT:-64M}
+          cpus: '${REDIS_CPU_LIMIT:-0.5}'
+        reservations:
+          memory: ${REDIS_MEMORY_RESERVATION:-32M}
+          cpus: '${REDIS_CPU_RESERVATION:-0.25}'
+    networks:
+      - docker_master_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+# Networks
+networks:
+  docker_master_network:
+    driver: bridge
+    name: ${COMPOSE_PROJECT_NAME:-docker_master}_network
+    ipam:
+      config:
+        - subnet: ${NETWORK_SUBNET:-172.20.0.0/16}
+
+# Volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-docker_master}_postgres_data
+  mysql_data:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-docker_master}_mysql_data
+  redis_data:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-docker_master}_redis_data

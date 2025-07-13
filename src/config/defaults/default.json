@@ -1,0 +1,162 @@
+{
+  "docker": {
+    "composeFile": "docker-compose.low-ram.yml",
+    "network": "low-ram-network",
+    "defaultMemoryLimit": "128M",
+    "defaultCpuLimit": "0.5",
+    "buildTimeout": 300,
+    "startTimeout": 60
+  },
+  "database": {
+    "postgres": {
+      "host": "postgres_low_ram",
+      "port": 5432,
+      "username": "postgres_user",
+      "password": "postgres_pass",
+      "defaultDatabase": "docker_master",
+      "maxConnections": 50
+    },
+    "mysql": {
+      "host": "mysql_low_ram",
+      "port": 3306,
+      "username": "mysql_user",
+      "password": "mysql_pass",
+      "defaultDatabase": "docker_master",
+      "maxConnections": 50
+    },
+    "redis": {
+      "host": "redis_low_ram",
+      "port": 6379,
+      "maxMemory": "48mb",
+      "maxMemoryPolicy": "allkeys-lru"
+    }
+  },
+  "platform": {
+    "defaultPort": 8015,
+    "portRange": {
+      "start": 8015,
+      "end": 8100
+    },
+    "xdebugPortOffset": 1000,
+    "supportedTypes": [
+      "wordpress",
+      "laravel74", 
+      "laravel84",
+      "ecommerce"
+    ],
+    "defaultType": "laravel74",
+    "phpVersions": {
+      "74": {
+        "image": "php74",
+        "memoryLimit": "96M",
+        "opcacheMemory": "32M"
+      },
+      "84": {
+        "image": "php84", 
+        "memoryLimit": "128M",
+        "opcacheMemory": "64M"
+      }
+    }
+  },
+  "nginx": {
+    "configPath": "./nginx/conf.d",
+    "sitesPath": "./nginx/sites", 
+    "defaultDomain": "localhost",
+    "sslEnabled": false,
+    "reloadCommand": "docker exec nginx_proxy nginx -s reload"
+  },
+  "logging": {
+    "level": "info",
+    "console": true,
+    "file": "./logs/docker-master.log",
+    "format": "json",
+    "maxFileSize": "10MB",
+    "maxFiles": 5
+  },
+  "paths": {
+    "projects": "./projects",
+    "platforms": "./platforms", 
+    "logs": "./logs",
+    "data": "./data",
+    "docker": "./docker",
+    "nginx": "./nginx",
+    "config": "./config",
+    "src": "./src",
+    "automation": "./automation",
+    "cli": "./cli"
+  },
+  "monitoring": {
+    "enabled": true,
+    "interval": 30,
+    "metrics": [
+      "cpu",
+      "memory", 
+      "disk",
+      "network"
+    ],
+    "alerts": {
+      "memoryThreshold": 80,
+      "cpuThreshold": 80,
+      "diskThreshold": 90
+    }
+  },
+  "autoDiscovery": {
+    "enabled": true,
+    "confidence": {
+      "high": 80,
+      "medium": 60,
+      "low": 40
+    },
+    "rules": {
+      "ecommerce": {
+        "keywords": ["shop", "store", "ecommerce", "commerce", "market", "cart", "buy", "sell"],
+        "phpVersion": "84",
+        "database": "mysql",
+        "features": ["redis", "queue", "storage"]
+      },
+      "wordpress": {
+        "keywords": ["blog", "cms", "news", "article", "post", "content", "wordpress"],
+        "phpVersion": "74", 
+        "database": "mysql",
+        "features": ["uploads", "media"]
+      },
+      "laravel84": {
+        "keywords": ["api", "service", "micro", "backend", "rest", "graphql"],
+        "phpVersion": "84",
+        "database": "postgres", 
+        "features": ["redis", "queue", "cache"]
+      },
+      "laravel74": {
+        "keywords": ["app", "web", "portal", "dashboard", "admin"],
+        "phpVersion": "74",
+        "database": "postgres",
+        "features": ["session", "auth"]
+      }
+    }
+  },
+  "security": {
+    "allowedHosts": ["localhost", "127.0.0.1"],
+    "corsEnabled": true,
+    "corsOrigins": ["*"],
+    "rateLimiting": {
+      "enabled": false,
+      "maxRequests": 100,
+      "windowMs": 900000
+    }
+  },
+  "performance": {
+    "caching": {
+      "enabled": true,
+      "ttl": 3600,
+      "maxSize": "100MB"
+    },
+    "compression": {
+      "enabled": true,
+      "level": 6
+    },
+    "optimization": {
+      "minifyAssets": false,
+      "bundleAssets": false
+    }
+  }
+}
