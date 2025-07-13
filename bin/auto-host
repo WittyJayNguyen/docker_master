@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Docker Master Platform - Cross-Platform Auto Host Manager
+# Tự động detect OS và chạy script phù hợp
+# Usage: ./auto-host [add|remove|list] [hostname] [ip]
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo ""
+echo -e "${BLUE}🌍 Docker Master Platform - Cross-Platform Host Manager${NC}"
+echo ""
+
+# Detect operating system
+detect_os() {
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]] || [[ -n "$WINDIR" ]]; then
+        echo "windows"
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "macos"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        echo "linux"
+    else
+        echo "unknown"
+    fi
+}
+
+OS=$(detect_os)
+
+case $OS in
+    "windows")
+        echo -e "${YELLOW}🪟 Detected: Windows${NC}"
+        echo -e "${CYAN}Running Windows batch script...${NC}"
+        echo ""
+        
+        # Convert Unix-style paths to Windows if needed
+        if command -v cygpath &> /dev/null; then
+            WIN_SCRIPT_DIR=$(cygpath -w "$SCRIPT_DIR")
+            cmd.exe /c "${WIN_SCRIPT_DIR}\\auto-host.bat" "$@"
+        else
+            # Try to run directly
+            "${SCRIPT_DIR}/auto-host.bat" "$@"
+        fi
+        ;;
+        
+    "macos")
+        echo -e "${GREEN}🍎 Detected: macOS${NC}"
+        echo -e "${CYAN}Running macOS/Unix script...${NC}"
+        echo ""
+        
+        # Make sure script is executable
+        chmod +x "${SCRIPT_DIR}/auto-host.sh"
+        "${SCRIPT_DIR}/auto-host.sh" "$@"
+        ;;
+        
+    "linux")
+        echo -e "${GREEN}🐧 Detected: Linux${NC}"
+        echo -e "${CYAN}Running Linux/Unix script...${NC}"
+        echo ""
+        
+        # Make sure script is executable
+        chmod +x "${SCRIPT_DIR}/auto-host.sh"
+        "${SCRIPT_DIR}/auto-host.sh" "$@"
+        ;;
+        
+    *)
+        echo -e "${RED}❌ Unsupported operating system: $OSTYPE${NC}"
+        echo ""
+        echo -e "${YELLOW}💡 Please run the appropriate script manually:${NC}"
+        echo "   Windows: bin\\auto-host.bat [command] [hostname]"
+        echo "   macOS/Linux: sudo ./bin/auto-host.sh [command] [hostname]"
+        exit 1
+        ;;
+esac
