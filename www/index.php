@@ -243,7 +243,7 @@
                         echo '<div style="background: rgba(243, 156, 18, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #f39c12;">';
                         try {
                             if (extension_loaded('redis')) {
-                                $redis = new Redis();
+                                $redis = new \Redis();
                                 $redis->connect('redis_low_ram', 6379);
                                 $info = $redis->info();
                                 echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
