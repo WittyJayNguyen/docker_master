@@ -38,51 +38,236 @@
         <div class="grid">
             <div class="card">
                 <h3>🌐 Platform URLs</h3>
-                <p><a href="http://localhost:8010" target="_blank">Laravel PHP 8.4 + PostgreSQL</a> ✅</p>
-                <p><a href="http://localhost:8020" target="_blank">Laravel PHP 7.4 + PostgreSQL</a> ✅</p>
-                <p><a href="http://localhost:8080" target="_blank">phpMyAdmin (MySQL)</a> ✅</p>
-                <p><a href="http://localhost:8081" target="_blank">pgAdmin (PostgreSQL)</a> ✅</p>
-                <p><a href="http://localhost:8025" target="_blank">Mailhog (Email Testing)</a> ✅</p>
-                <p><a href="/redis-test.php" target="_blank">Redis Connection Test</a> 🔴</p>
+                <div style="display: grid; gap: 10px;">
+                    <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 4px solid #3498db;">
+                        <strong>🚀 Laravel Applications</strong>
+                        <div style="margin-top: 8px;">
+                            <a href="http://localhost:8010" target="_blank" style="color: #3498db; text-decoration: none;">
+                                📱 Laravel PHP 8.4 + PostgreSQL
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Running</span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <a href="http://localhost:8020" target="_blank" style="color: #3498db; text-decoration: none;">
+                                🔧 Laravel PHP 7.4 + PostgreSQL
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Running</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 4px solid #e74c3c;">
+                        <strong>🗄️ Database Management</strong>
+                        <div style="margin-top: 8px;">
+                            <a href="http://localhost:8080" target="_blank" style="color: #e74c3c; text-decoration: none;">
+                                🐬 phpMyAdmin (MySQL)
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Running</span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <a href="http://localhost:8081" target="_blank" style="color: #e74c3c; text-decoration: none;">
+                                🐘 pgAdmin (PostgreSQL)
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Running</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                        <strong>🛠️ Development Tools</strong>
+                        <div style="margin-top: 8px;">
+                            <a href="http://localhost:8025" target="_blank" style="color: #f39c12; text-decoration: none;">
+                                📧 Mailhog (Email Testing)
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Running</span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <a href="/redis-test.php" target="_blank" style="color: #f39c12; text-decoration: none;">
+                                🔴 Redis Connection Test
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Available</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 4px solid #9b59b6;">
+                        <strong>📚 Documentation & Guides</strong>
+                        <div style="margin-top: 8px;">
+                            <a href="/postgresql-guide.php" target="_blank" style="color: #9b59b6; text-decoration: none;">
+                                📖 PostgreSQL Complete Guide
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Available</span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <a href="/test-db.php" target="_blank" style="color: #9b59b6; text-decoration: none;">
+                                🧪 Database Connection Test
+                            </a>
+                            <span style="color: #27ae60; font-weight: bold;">✅ Available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="text-align: center;">
+                        <a href="/db-status.php" style="display: block; background: linear-gradient(45deg, #3498db, #2980b9); color: white; padding: 15px; border-radius: 10px; text-decoration: none; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 24px; margin-bottom: 5px;">📊</div>
+                            <strong>Database Status</strong>
+                            <div style="font-size: 12px; opacity: 0.9;">Real-time connection test</div>
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="/postgresql-guide.php" style="display: block; background: linear-gradient(45deg, #9b59b6, #8e44ad); color: white; padding: 15px; border-radius: 10px; text-decoration: none; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 24px; margin-bottom: 5px;">🐘</div>
+                            <strong>PostgreSQL Guide</strong>
+                            <div style="font-size: 12px; opacity: 0.9;">Complete documentation</div>
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="/test-db.php" style="display: block; background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; padding: 15px; border-radius: 10px; text-decoration: none; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 24px; margin-bottom: 5px;">🧪</div>
+                            <strong>Database Test</strong>
+                            <div style="font-size: 12px; opacity: 0.9;">Performance testing</div>
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="/phpinfo.php" style="display: block; background: linear-gradient(45deg, #f39c12, #e67e22); color: white; padding: 15px; border-radius: 10px; text-decoration: none; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 24px; margin-bottom: 5px;">📋</div>
+                            <strong>PHP Info</strong>
+                            <div style="font-size: 12px; opacity: 0.9;">System information</div>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
                 <h3>🗄️ Database Status & Credentials</h3>
-                <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px;">
-                    <p><strong>PostgreSQL:</strong> localhost:5432</p>
-                    <p><strong>User:</strong> postgres_user | <strong>Pass:</strong> postgres_pass</p>
-                    <p><strong>Import User:</strong> tg_retrieval | <strong>Pass:</strong> 123456</p>
-                    <p><strong>MySQL:</strong> localhost:3306</p>
-                    <p><strong>User:</strong> mysql_user | <strong>Pass:</strong> mysql_pass</p>
-                    <p><a href="http://localhost:8080">📊 phpMyAdmin</a> | <a href="http://localhost:8081">🐘 pgAdmin</a></p>
+
+                <!-- PostgreSQL Section -->
+                <div style="background: linear-gradient(45deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.1)); padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #3498db;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 24px; margin-right: 10px;">🐘</span>
+                        <strong style="font-size: 16px;">PostgreSQL Database</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px;">
+                        <div><strong>Host:</strong> localhost:5432</div>
+                        <div><strong>Database:</strong> docker_master</div>
+                        <div><strong>Username:</strong> postgres_user</div>
+                        <div><strong>Password:</strong> postgres_pass</div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a href="http://localhost:8081" target="_blank" style="background: #3498db; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 12px;">🐘 Open pgAdmin</a>
+                    </div>
                 </div>
-                <?php
-                try {
-                    $mysql = new PDO("mysql:host=mysql_low_ram;port=3306;dbname=main_db", "mysql_user", "mysql_pass");
-                    echo "<p><span class='status success'>✅</span> MySQL Connected</p>";
-                } catch (Exception $e) {
-                    echo "<p><span class='status error'>❌</span> MySQL Failed</p>";
-                }
 
-                try {
-                    $pgsql = new PDO("pgsql:host=postgres_low_ram;port=5432;dbname=docker_master", "postgres_user", "postgres_pass");
-                    echo "<p><span class='status success'>✅</span> PostgreSQL Connected</p>";
-                } catch (Exception $e) {
-                    echo "<p><span class='status error'>❌</span> PostgreSQL Failed: " . $e->getMessage() . "</p>";
-                }
+                <!-- MySQL Section -->
+                <div style="background: linear-gradient(45deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1)); padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #e74c3c;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 24px; margin-right: 10px;">🐬</span>
+                        <strong style="font-size: 16px;">MySQL Database</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px;">
+                        <div><strong>Host:</strong> localhost:3306</div>
+                        <div><strong>Database:</strong> main_db</div>
+                        <div><strong>Username:</strong> mysql_user</div>
+                        <div><strong>Password:</strong> mysql_pass</div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a href="http://localhost:8080" target="_blank" style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 12px;">📊 Open phpMyAdmin</a>
+                    </div>
+                </div>
 
-                try {
-                    if (extension_loaded('redis')) {
-                        $redis = new Redis();
-                        $redis->connect('redis_low_ram', 6379);
-                        echo "<p><span class='status success'>✅</span> Redis Connected</p>";
-                    } else {
-                        echo "<p><span class='status error'>❌</span> Redis Extension Not Loaded</p>";
-                    }
-                } catch (Exception $e) {
-                    echo "<p><span class='status error'>❌</span> Redis Failed: " . $e->getMessage() . "</p>";
-                }
-                ?>
+                <!-- Redis Section -->
+                <div style="background: linear-gradient(45deg, rgba(243, 156, 18, 0.1), rgba(230, 126, 34, 0.1)); padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #f39c12;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 24px; margin-right: 10px;">🔴</span>
+                        <strong style="font-size: 16px;">Redis Cache</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px;">
+                        <div><strong>Host:</strong> localhost:6379</div>
+                        <div><strong>Database:</strong> 0 (default)</div>
+                        <div><strong>Auth:</strong> No password</div>
+                        <div><strong>Purpose:</strong> Cache & Sessions</div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a href="/redis-test.php" target="_blank" style="background: #f39c12; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 12px;">🔴 Test Redis</a>
+                    </div>
+                </div>
+
+                <!-- Connection Status -->
+                <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 10px;">
+                    <strong style="margin-bottom: 15px; display: block; font-size: 16px;">🔌 Live Connection Status</strong>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <?php
+                        // PostgreSQL Test
+                        echo '<div style="background: rgba(52, 152, 219, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #3498db;">';
+                        try {
+                            $pgsql = new PDO("pgsql:host=postgres_low_ram;port=5432;dbname=docker_master", "postgres_user", "postgres_pass");
+                            $stmt = $pgsql->query("SELECT version()");
+                            $version = $stmt->fetchColumn();
+                            $shortVersion = substr($version, 0, strpos($version, ' on'));
+                            echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                            echo '<span style="color: #27ae60; font-size: 18px; margin-right: 8px;">✅</span>';
+                            echo '<strong>PostgreSQL Connected</strong>';
+                            echo '</div>';
+                            echo '<div style="font-size: 12px; color: #7f8c8d;">' . htmlspecialchars($shortVersion) . '</div>';
+                        } catch (Exception $e) {
+                            echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                            echo '<span style="color: #e74c3c; font-size: 18px; margin-right: 8px;">❌</span>';
+                            echo '<strong>PostgreSQL Failed</strong>';
+                            echo '</div>';
+                            echo '<div style="font-size: 12px; color: #e74c3c;">' . htmlspecialchars($e->getMessage()) . '</div>';
+                        }
+                        echo '</div>';
+
+                        // MySQL Test
+                        echo '<div style="background: rgba(231, 76, 60, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #e74c3c;">';
+                        try {
+                            $mysql = new PDO("mysql:host=mysql_low_ram;port=3306;dbname=main_db", "mysql_user", "mysql_pass");
+                            $stmt = $mysql->query("SELECT VERSION()");
+                            $version = $stmt->fetchColumn();
+                            echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                            echo '<span style="color: #27ae60; font-size: 18px; margin-right: 8px;">✅</span>';
+                            echo '<strong>MySQL Connected</strong>';
+                            echo '</div>';
+                            echo '<div style="font-size: 12px; color: #7f8c8d;">MySQL ' . htmlspecialchars($version) . '</div>';
+                        } catch (Exception $e) {
+                            echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                            echo '<span style="color: #e74c3c; font-size: 18px; margin-right: 8px;">❌</span>';
+                            echo '<strong>MySQL Failed</strong>';
+                            echo '</div>';
+                            echo '<div style="font-size: 12px; color: #e74c3c;">' . htmlspecialchars($e->getMessage()) . '</div>';
+                        }
+                        echo '</div>';
+
+                        // Redis Test
+                        echo '<div style="background: rgba(243, 156, 18, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #f39c12;">';
+                        try {
+                            if (extension_loaded('redis')) {
+                                $redis = new Redis();
+                                $redis->connect('redis_low_ram', 6379);
+                                $info = $redis->info();
+                                echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                                echo '<span style="color: #27ae60; font-size: 18px; margin-right: 8px;">✅</span>';
+                                echo '<strong>Redis Connected</strong>';
+                                echo '</div>';
+                                echo '<div style="font-size: 12px; color: #7f8c8d;">Redis ' . ($info['redis_version'] ?? 'Unknown') . '</div>';
+                            } else {
+                                echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                                echo '<span style="color: #e74c3c; font-size: 18px; margin-right: 8px;">❌</span>';
+                                echo '<strong>Redis Extension Not Loaded</strong>';
+                                echo '</div>';
+                            }
+                        } catch (Exception $e) {
+                            echo '<div style="display: flex; align-items: center; margin-bottom: 5px;">';
+                            echo '<span style="color: #e74c3c; font-size: 18px; margin-right: 8px;">❌</span>';
+                            echo '<strong>Redis Failed</strong>';
+                            echo '</div>';
+                            echo '<div style="font-size: 12px; color: #e74c3c;">' . htmlspecialchars($e->getMessage()) . '</div>';
+                        }
+                        echo '</div>';
+                        ?>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
@@ -159,8 +344,53 @@
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <p>🚀 Ready for development! Create new platforms with: <code>bin\create.bat project-name</code></p>
+        <!-- Footer -->
+        <div style="background: rgba(0,0,0,0.1); padding: 25px; border-radius: 15px; margin-top: 30px; text-align: center;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <h4 style="color: #3498db; margin-bottom: 10px;">🚀 Quick Start</h4>
+                    <p style="font-size: 14px; margin: 5px 0;">Create new project:</p>
+                    <code style="background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 5px; font-size: 12px;">bin\create.bat project-name</code>
+                </div>
+                <div>
+                    <h4 style="color: #e74c3c; margin-bottom: 10px;">📚 Documentation</h4>
+                    <p style="font-size: 14px; margin: 5px 0;">
+                        <a href="/postgresql-guide.php" style="color: #3498db; text-decoration: none;">PostgreSQL Guide</a> |
+                        <a href="/test-db.php" style="color: #3498db; text-decoration: none;">Database Test</a>
+                    </p>
+                </div>
+                <div>
+                    <h4 style="color: #f39c12; margin-bottom: 10px;">⚡ Performance</h4>
+                    <p style="font-size: 14px; margin: 5px 0;">
+                        RAM Usage: ~1.2GB<br>
+                        Optimized for 4GB+ systems
+                    </p>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">🐳 Docker Master Platform</h3>
+                <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 15px;">
+                    Professional Multi-PHP Development Environment<br>
+                    <strong>Status:</strong>
+                    <span style="color: #27ae60;">✅ All Services Running</span> |
+                    <strong>Version:</strong> 2.0 |
+                    <strong>Updated:</strong> <?= date('Y-m-d H:i:s') ?>
+                </p>
+
+                <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <span style="background: #3498db; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">PHP 8.4 ✅</span>
+                    <span style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">PHP 7.4 ✅</span>
+                    <span style="background: #9b59b6; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">PostgreSQL ✅</span>
+                    <span style="background: #f39c12; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">MySQL ✅</span>
+                    <span style="background: #e67e22; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">Redis ✅</span>
+                    <span style="background: #27ae60; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">Nginx ✅</span>
+                </div>
+
+                <p style="font-size: 12px; color: #95a5a6; margin-top: 15px;">
+                    🎉 <strong>Ready for Production!</strong> All services optimized and running smoothly.
+                </p>
+            </div>
         </div>
     </div>
 </body>
