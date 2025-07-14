@@ -1,10 +1,10 @@
-# Use webdevops/php-apache with PHP 8.4
-FROM webdevops/php-apache:8.4
+# Use official PHP 8.4 with Apache
+FROM php:8.4-apache
 
 # Set working directory
-WORKDIR /app
+WORKDIR /var/www/html
 
-# Install additional PHP extensions for e-commerce
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
@@ -20,7 +20,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         gd \
         zip \
@@ -35,9 +39,10 @@ RUN apt-get update && apt-get install -y \
         bcmath \
         soap \
         exif \
-        opcache \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        opcache
+
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
 
 # Install Xdebug for PHP 8.4
 RUN pecl install xdebug \
@@ -67,10 +72,7 @@ COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN mkdir -p /tmp/xdebug && chmod 777 /tmp/xdebug
 
 # Set proper permissions
-RUN chown -R application:application /app
+RUN chown -R www-data:www-data /var/www/html
 
 # Expose port 80
 EXPOSE 80
-
-# Start Apache
-CMD ["supervisord"]

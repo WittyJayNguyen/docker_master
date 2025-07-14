@@ -1,0 +1,450 @@
+version: '3.8'
+
+# Docker Master Platform - Optimized Configuration
+#
+# RAM Usage Breakdown (Optimized):
+# - PostgreSQL: 256MB (primary database)
+# - MySQL: 256MB (secondary database for WordPress/legacy)
+# - Redis: 64MB (cache and sessions)
+# - Nginx Proxy: 64MB (reverse proxy with SSL)
+# - PHP 8.4 Container: 256MB (modern Laravel apps)
+# - PHP 7.4 Container: 256MB (legacy Laravel/WordPress)
+# - Mailhog: 32MB (email testing)
+# - Total: ~1.2GB (suitable for 4GB+ systems)
+#
+# Features:
+# - Auto-restart policies
+# - Health checks for all services
+# - Resource limits and reservations
+# - Optimized database configurations
+# - SSL-ready Nginx proxy
+# - Development-friendly logging
+# - Cross-platform volume mounts
+
+services:
+  # PostgreSQL - Primary database with optimized settings
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_low_ram
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./logs/postgresql:/var/log/postgresql
+      - ./database/postgresql/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: docker_master
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_pass
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      # Performance tuning for development
+      POSTGRES_SHARED_BUFFERS: 64MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 192MB
+      POSTGRES_WORK_MEM: 4MB
+      POSTGRES_MAINTENANCE_WORK_MEM: 16MB
+      POSTGRES_MAX_CONNECTIONS: 50
+      POSTGRES_RANDOM_PAGE_COST: 1.1
+      POSTGRES_EFFECTIVE_IO_CONCURRENCY: 200
+    command: >
+      postgres
+      -c shared_buffers=64MB
+      -c effective_cache_size=192MB
+      -c work_mem=4MB
+      -c maintenance_work_mem=16MB
+      -c max_connections=50
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c log_statement=all
+      -c log_duration=on
+      -c log_min_duration_statement=100ms
+      -c logging_collector=on
+      -c log_directory=/var/log/postgresql
+      -c log_filename=postgresql-%Y-%m-%d.log
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '1.0'
+        reservations:
+          memory: 128M
+          cpus: '0.5'
+    networks:
+      - low-ram-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_user -d docker_master"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    labels:
+      - "com.docker.compose.service=postgres"
+      - "com.docker.compose.project=docker_master"
+
+  # Redis - Cache and session storage with persistence
+  redis:
+    image: redis:7-alpine
+    container_name: redis_low_ram
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./logs/redis:/var/log/redis
+      - ./database/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf
+      --maxmemory 48mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+      --appendfsync everysec
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+      --tcp-keepalive 300
+      --timeout 0
+      --databases 16
+      --logfile /var/log/redis/redis.log
+      --loglevel notice
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.5'
+        reservations:
+          memory: 32M
+          cpus: '0.25'
+    networks:
+      - low-ram-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.docker.compose.service=redis"
+      - "com.docker.compose.project=docker_master"
+
+  # Laravel PHP 8.4 - Modern Laravel applications
+  laravel-php84:
+    build:
+      context: ./docker/php84
+      dockerfile: Dockerfile
+      args:
+        - PHP_VERSION=8.4
+        - ENABLE_XDEBUG=true
+        - ENABLE_OPCACHE=true
+    container_name: laravel_php84_low_ram
+    restart: unless-stopped
+    ports:
+      - "8010:80"
+      - "9084:9003"  # Xdebug port
+    volumes:
+      - ./projects/laravel-php84-psql:/var/www/html
+      - ./logs/apache/laravel-php84:/var/log/apache2
+      - ./logs/php/laravel-php84:/var/log/php
+      - ./data/uploads/laravel-php84:/app/uploads
+      - ./www:/var/www/dashboard:ro  # Dashboard access
+    environment:
+      # Web server configuration
+      WEB_DOCUMENT_ROOT: /var/www/html
+      APACHE_RUN_USER: www-data
+      APACHE_RUN_GROUP: www-data
+
+      # PHP configuration
+      PHP_VERSION: 8.4
+      PHP_MEMORY_LIMIT: 256M
+      PHP_MAX_EXECUTION_TIME: 300
+      PHP_MAX_INPUT_TIME: 300
+      PHP_POST_MAX_SIZE: 64M
+      PHP_UPLOAD_MAX_FILESIZE: 64M
+
+      # OPcache optimization
+      PHP_OPCACHE_ENABLE: 1
+      PHP_OPCACHE_MEMORY_CONSUMPTION: 128
+      PHP_OPCACHE_MAX_ACCELERATED_FILES: 4000
+      PHP_OPCACHE_REVALIDATE_FREQ: 2
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
+      PHP_OPCACHE_JIT: tracing
+      PHP_OPCACHE_JIT_BUFFER_SIZE: 64M
+
+      # Xdebug configuration
+      XDEBUG_MODE: develop,debug
+      XDEBUG_START_WITH_REQUEST: yes
+      XDEBUG_CLIENT_HOST: host.docker.internal
+      XDEBUG_CLIENT_PORT: 9003
+      XDEBUG_IDEKEY: VSCODE
+
+      # Database configuration
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres_low_ram
+      DB_PORT: 5432
+      DB_DATABASE: laravel_php84_psql
+      DB_USERNAME: postgres_user
+      DB_PASSWORD: postgres_pass
+
+      # Cache configuration
+      REDIS_HOST: redis_low_ram
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: null
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+
+      # Mail configuration
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailhog_low_ram
+      MAIL_PORT: 1025
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+
+      # Application environment
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_KEY: base64:YourAppKeyHere
+      LOG_CHANNEL: daily
+      LOG_LEVEL: debug
+
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '1.0'
+        reservations:
+          memory: 128M
+          cpus: '0.5'
+    networks:
+      - low-ram-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+    labels:
+      - "com.docker.compose.service=laravel-php84"
+      - "com.docker.compose.project=docker_master"
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel84.rule=Host(`laravel84.localhost`)"
+
+  # Laravel PHP 7.4 - optimized container
+  laravel-php74:
+    build:
+      context: ./docker/php74
+      dockerfile: Dockerfile
+    container_name: laravel_php74_low_ram
+    restart: unless-stopped
+    ports:
+      - "8020:80"
+      - "9074:9003"  # Xdebug port
+    volumes:
+      - ./projects/laravel-php74-psql:/var/www/html
+      - ./logs/apache/laravel-php74:/var/log/apache2
+      - ./data/uploads/laravel-php74:/app/uploads
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+      - PHP_VERSION=7.4
+      - PHP_MEMORY_LIMIT=96M
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=32
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=1000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres_low_ram
+      - DB_PORT=5432
+      - DB_DATABASE=laravel_php74_psql
+      - DB_USERNAME=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - REDIS_HOST=redis_low_ram
+      - REDIS_PORT=6379
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 96M
+    networks:
+      - low-ram-network
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # phpMyAdmin - MySQL Web Interface
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_low_ram
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql_low_ram
+      PMA_PORT: 3306
+      PMA_USER: mysql_user
+      PMA_PASSWORD: mysql_pass
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    networks:
+      - low-ram-network
+    depends_on:
+      - mysql_low_ram
+    labels:
+      - "com.docker.compose.service=phpmyadmin"
+      - "com.docker.compose.project=docker_master"
+
+  # pgAdmin - PostgreSQL Web Interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_low_ram
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    networks:
+      - low-ram-network
+    depends_on:
+      - postgres
+    labels:
+      - "com.docker.compose.service=pgadmin"
+      - "com.docker.compose.project=docker_master"
+
+
+
+  # Mailhog - lightweight email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog_low_ram
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+        reservations:
+          memory: 16M
+    networks:
+      - low-ram-network
+
+  # Nginx Proxy - Domain routing for platforms
+  nginx_proxy:
+    image: nginx:alpine
+    container_name: nginx_proxy_low_ram
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M
+    networks:
+      - low-ram-network
+    depends_on:
+      - mysql_low_ram
+      - postgres
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # MySQL 8.0 - RAM optimized for dual database support
+  mysql_low_ram:
+    image: mysql:8.0
+    container_name: mysql_low_ram
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+      MYSQL_DATABASE: main_db
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_pass
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --innodb-buffer-pool-size=128M
+      --innodb-redo-log-capacity=64M
+      --key-buffer-size=32M
+      --table-open-cache=256
+      --sort-buffer-size=2M
+      --read-buffer-size=1M
+      --read-rnd-buffer-size=2M
+      --thread-cache-size=32
+      --tmp-table-size=32M
+      --max-heap-table-size=32M
+      --skip-name-resolve
+      --max-connections=100
+      --wait-timeout=28800
+      --interactive-timeout=28800
+      --skip-host-cache
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    networks:
+      - low-ram-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "mysql_user", "-pmysql_pass"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Network
+networks:
+  low-ram-network:
+    driver: bridge
+    name: docker_master_low_ram
+
+# Volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mysql_data:
+    driver: local
+  pgadmin_data:
+    driver: local

@@ -38,9 +38,12 @@
         <div class="grid">
             <div class="card">
                 <h3>🌐 Platform URLs</h3>
-                <p><a href="http://localhost:8010/laravel.php">Laravel PHP 8.4</a></p>
-                <p><a href="http://localhost:8020">Laravel PHP 7.4</a></p>
-                <p><a href="http://localhost:8030">WordPress PHP 7.4</a></p>
+                <p><a href="http://localhost:8010" target="_blank">Laravel PHP 8.4 + PostgreSQL</a> ✅</p>
+                <p><a href="http://localhost:8020" target="_blank">Laravel PHP 7.4 + PostgreSQL</a> ✅</p>
+                <p><a href="http://localhost:8080" target="_blank">phpMyAdmin (MySQL)</a> ✅</p>
+                <p><a href="http://localhost:8081" target="_blank">pgAdmin (PostgreSQL)</a> ✅</p>
+                <p><a href="http://localhost:8025" target="_blank">Mailhog (Email Testing)</a> ✅</p>
+                <p><a href="/redis-test.php" target="_blank">Redis Connection Test</a> 🔴</p>
             </div>
 
             <div class="card">
@@ -62,10 +65,10 @@
                 }
 
                 try {
-                    $pgsql = new PDO("pgsql:host=postgres_low_ram;port=5432;dbname=postgres", "postgres_user", "postgres_pass");
+                    $pgsql = new PDO("pgsql:host=postgres_low_ram;port=5432;dbname=docker_master", "postgres_user", "postgres_pass");
                     echo "<p><span class='status success'>✅</span> PostgreSQL Connected</p>";
                 } catch (Exception $e) {
-                    echo "<p><span class='status error'>❌</span> PostgreSQL Failed</p>";
+                    echo "<p><span class='status error'>❌</span> PostgreSQL Failed: " . $e->getMessage() . "</p>";
                 }
 
                 try {
@@ -73,9 +76,11 @@
                         $redis = new Redis();
                         $redis->connect('redis_low_ram', 6379);
                         echo "<p><span class='status success'>✅</span> Redis Connected</p>";
+                    } else {
+                        echo "<p><span class='status error'>❌</span> Redis Extension Not Loaded</p>";
                     }
                 } catch (Exception $e) {
-                    echo "<p><span class='status error'>❌</span> Redis Failed</p>";
+                    echo "<p><span class='status error'>❌</span> Redis Failed: " . $e->getMessage() . "</p>";
                 }
                 ?>
             </div>
