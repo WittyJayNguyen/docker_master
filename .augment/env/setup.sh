@@ -79,7 +79,7 @@ version: '3.8'
 services:
   # PostgreSQL - Primary database
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: postgres_low_ram
     restart: unless-stopped
     ports:

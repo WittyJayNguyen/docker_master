@@ -187,7 +187,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: ${POSTGRES_HOST:-postgres_low_ram}
     restart: unless-stopped
     environment:
