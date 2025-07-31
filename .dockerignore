@@ -1,0 +1,20 @@
+# Prevent Docker from auto-creating project directories
+# Only allow existing legitimate project structures
+
+# Auto-created empty directories
+# Note: This doesn't prevent volume mounting, just build context
+
+# Log and data directories that get auto-created
+
+# Log and data directories
+logs/apache/*/
+data/uploads/*/
+
+# Temporary and cache files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
+vendor/
+.git/

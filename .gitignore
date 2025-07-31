@@ -66,3 +66,9 @@ projects/*/.env
 *.backup
 *.bak
 *~
+ 
+# Auto-created directories 
+logs/apache/*/ 
+data/uploads/*/ 
+projects/*/cache/ 
+projects/*/tmp/ 

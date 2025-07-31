@@ -110,8 +110,18 @@ COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 # Create Xdebug log directory
 RUN mkdir -p /tmp/xdebug && chmod 777 /tmp/xdebug
 
+# Copy custom entrypoint script
+COPY entrypoint.sh /usr/local/bin/custom-entrypoint.sh
+RUN chmod +x /usr/local/bin/custom-entrypoint.sh
+
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html
 
+# Set custom entrypoint
+ENTRYPOINT ["/usr/local/bin/custom-entrypoint.sh"]
+
 # Expose port 80
 EXPOSE 80
+
+# Default command
+CMD ["apache2-foreground"]
